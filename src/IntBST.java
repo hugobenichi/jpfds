@@ -41,8 +41,14 @@ public abstract class IntBST implements IntSet<IntBST>, Monoid<IntBST> {
       this.elem = elem;
     }
 
-    public String toString() {
-      return "{ " + left + " | " + elem + " | " + right + "}";
+    public String toString() { return "{ "+left+" | "+elem+" | "+right+" }"; }
+
+    public boolean isEmpty() { return false; }
+
+    public boolean has(int elem) {
+      return (this.elem == elem)
+          || (this.elem > elem && this.left.has(elem))
+          || (this.right.has(elem));
     }
 
     public IntBST insert(int elem) {
@@ -84,14 +90,6 @@ public abstract class IntBST implements IntSet<IntBST>, Monoid<IntBST> {
 
       return new IntBSTNode(that.elem, that.left.union(this), that.right);
     }
-
-    public boolean has(int elem) {
-      return (this.elem == elem)
-          || (this.elem > elem && this.left.has(elem))
-          || (this.right.has(elem));
-    }
-
-    public boolean isEmpty() { return false; }
 
     private IntBST copyLeft(IntBST _right) {
       return new IntBSTNode(this.elem, this.left, _right);
