@@ -2,7 +2,13 @@ Build:
 
   decide on build tool: ant ? maven ? custom with rake ?
 
+IntBst:
+  add iterator interface
+  add equality
+
 Interfaces:
+    remove container and put has(int) into IntSet
+
     add a countable interface with a size method
 
   IntSet ->
