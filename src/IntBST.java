@@ -2,12 +2,12 @@
 
 //import jpfds.IntSet;
 
-public abstract class IntBST implements IntSet<IntBST> {
+public abstract class IntBST implements IntSet<IntBST>, Monoid<IntBST> {
 
-  abstract public IntSet<IntBST> insert(int elem);
-  abstract public IntSet<IntBST> remove(int elem);
-  abstract public IntSet<IntBST> union(IntSet<IntBST> that);
-           public IntSet<IntBST> empty() { return empty; }
+  abstract public IntBST insert(int elem);
+  abstract public IntBST remove(int elem);
+  abstract public IntBST union(IntBST that);
+           public IntBST empty() { return empty; }
   abstract public boolean has(int elem);
            public boolean isEmpty() { return false; }
            public boolean nonEmpty() { return !isEmpty(); }
@@ -15,9 +15,9 @@ public abstract class IntBST implements IntSet<IntBST> {
   public static final IntBST empty = new Empty();
 
   private static class Empty extends IntBST {
-    public IntSet<IntBST> insert(int elem) { return new IntBSTNode(elem); }
-    public IntSet<IntBST> remove(int elem) { return this; }
-    public IntSet<IntBST> union(IntSet<IntBST> that) { return that; }
+    public IntBST insert(int elem) { return new IntBSTNode(elem); }
+    public IntBST remove(int elem) { return this; }
+    public IntBST union(IntBST that) { return that; }
     public boolean has(int elem) { return false; }
     public boolean isEmpty() { return true; }
     public String toString() { return "E"; }
@@ -25,8 +25,8 @@ public abstract class IntBST implements IntSet<IntBST> {
 
   private static class IntBSTNode extends IntBST {
 
-    public final IntSet<IntBST> left;
-    public final IntSet<IntBST> right;
+    public final IntBST left;
+    public final IntBST right;
     public final int elem;
 
     public IntBSTNode(int elem) {
@@ -35,7 +35,7 @@ public abstract class IntBST implements IntSet<IntBST> {
       this.elem = elem;
     }
 
-    public IntBSTNode(int elem, IntSet<IntBST> _left, IntSet<IntBST> _right) {
+    public IntBSTNode(int elem, IntBST _left, IntBST _right) {
       this.left = _left;
       this.right = _right;
       this.elem = elem;
@@ -45,7 +45,7 @@ public abstract class IntBST implements IntSet<IntBST> {
       return "{ " + left + " | " + elem + " | " + right + "}";
     }
 
-    public IntSet<IntBST> insert(int elem) {
+    public IntBST insert(int elem) {
       if (this.elem == elem)
         return this;
 
@@ -55,7 +55,7 @@ public abstract class IntBST implements IntSet<IntBST> {
       return copyLeft(this.right.insert(elem));
     }
 
-    public IntSet<IntBST> remove(int elem) {
+    public IntBST remove(int elem) {
       if (this.elem == elem)
         return this.left.union(this.right);
 
@@ -65,19 +65,17 @@ public abstract class IntBST implements IntSet<IntBST> {
       return copyLeft(this.right.remove(elem));
     }
 
-    // ahhhhh I need to do self recursive typing if I use oo !
-    // how to do this cleanly ?
-    public IntSet<IntBST> union(IntSet<IntBST> that) {
+    public IntBST union(IntBST that) {
       if (that.isEmpty())
         return this;
       else
         return this.selfUnion((IntBSTNode)that);
     }
 
-    public IntSet<IntBST> selfUnion(IntBSTNode that) {
+    private IntBST selfUnion(IntBSTNode that) {
       if (this.elem == that.elem) {
-        IntSet<IntBST> newLeft = this.left.union(that.left);
-        IntSet<IntBST> newRight = this.right.union(that.right);
+        IntBST newLeft = this.left.union(that.left);
+        IntBST newRight = this.right.union(that.right);
         return new IntBSTNode(this.elem, newLeft, newRight);
       }
 
@@ -95,11 +93,11 @@ public abstract class IntBST implements IntSet<IntBST> {
 
     public boolean isEmpty() { return false; }
 
-    private IntSet<IntBST> copyLeft(IntSet<IntBST> _right) {
+    private IntBST copyLeft(IntBST _right) {
       return new IntBSTNode(this.elem, this.left, _right);
     }
 
-    private IntSet<IntBST> copyRight(IntSet<IntBST> _left) {
+    private IntBST copyRight(IntBST _left) {
       return new IntBSTNode(this.elem, _left, this.right);
     }
 
@@ -114,7 +112,7 @@ public abstract class IntBST implements IntSet<IntBST> {
 
     int[] nums = {0, 4, 3, 6, 3, 4, 8, 9, 6, 5, 1, 4, 6, 2};
 
-    IntSet<IntBST> set = IntBST.empty;
+    IntBST set = IntBST.empty;
 
     for (int i : nums) {
       set = set.insert(i);

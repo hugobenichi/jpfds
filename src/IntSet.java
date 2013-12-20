@@ -3,9 +3,7 @@
 // move to native
 // abstract has modifiable collection
 
-public interface IntSet<Self> extends IntContainer {
-  public IntSet<Self> insert(int elem);
-  public IntSet<Self> remove(int elem);
-  public IntSet<Self> union(IntSet<Self> that);
-  public IntSet<Self> empty();
+public interface IntSet<S extends IntSet<S>> extends IntContainer {
+  public S insert(int elem);
+  public S remove(int elem);
 }
