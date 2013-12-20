@@ -1,0 +1,18 @@
+Build:
+
+  decide on build tool: ant ? maven ? custom with rake ?
+
+Interfaces:
+    add a countable interface with a size method
+
+  IntSet ->
+    abstract empty and merge as part of monoid interface
+    abstract add/remove abstraction (check clojure api)
+    type the recursive thing correctly
+
+Tests:
+
+  Add test framework
+
+  Contract api that takes an interface and verify propertie on the interface
+  can then be combined with a Generator of concrete implementation
