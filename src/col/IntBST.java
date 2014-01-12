@@ -1,29 +1,44 @@
-package jpfds.impl;
+package jpfds.col;
 
-import jpfds.IntSet;
-import jpfds.Monoid;
+import jpfds.abs.*;
 
-public abstract class IntBST implements IntSet<IntBST>, Monoid<IntBST> {
+public abstract class IntBST
+    implements Container, IntSet, IntSetAssoc<IntBST>, MonoidCol<IntBST> {
 
+  /* IntSet */
+  abstract public boolean has(int elem);
+
+  /* IntSetAssoc */
   abstract public IntBST insert(int elem);
   abstract public IntBST remove(int elem);
-  abstract public IntBST union(IntBST that);
+
+  /* IntSetAlgebra */
            public IntBST empty() { return empty; }
-  abstract public boolean has(int elem);
+  abstract public IntBST union(IntBST that);
+  abstract public IntBST inter(IntBST that);
+  abstract public IntBST excl(IntBST that);
+           public IntBST conj(IntBST total) { return total.excl(this); }
+
+  /* Container */
            public boolean isEmpty() { return false; }
            public boolean nonEmpty() { return !isEmpty(); }
 
   public static final IntBST empty = new Empty();
 
+  /** Empty Tree class which populates the leaves of the binary tree set.
+   *  This clas should be used as a singleton and instantiated exactly once. */
   private static class Empty extends IntBST {
     public IntBST insert(int elem) { return new IntBSTNode(elem); }
     public IntBST remove(int elem) { return this; }
     public IntBST union(IntBST that) { return that; }
+    public IntBST inter(IntBST that) { return this; }
+    public IntBST excl(IntBST that) { return this; }
     public boolean has(int elem) { return false; }
     public boolean isEmpty() { return true; }
     public String toString() { return "E"; }
   }
 
+  /** Node class which populates the internal nodes of the binary tree set. */
   private static class IntBSTNode extends IntBST {
 
     public final IntBST left;
@@ -90,6 +105,23 @@ public abstract class IntBST implements IntSet<IntBST>, Monoid<IntBST> {
         return new IntBSTNode(that.elem, that.left, that.right.union(this));
 
       return new IntBSTNode(that.elem, that.left.union(this), that.right);
+    }
+
+    public IntBST inter(IntBST that) {
+      if (that.isEmpty())
+        return empty;
+      else
+        /* copy self with query of elements in other set. Can only remove
+           elements, therefore should be straightforward. */
+        return this;
+    }
+
+    public IntBST excl(IntBST that) {
+      if (that.isEmpty())
+        return this;
+      else
+        /* cf above comments. */
+        return this;
     }
 
     private IntBST copyLeft(IntBST _right) {
