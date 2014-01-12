@@ -1,6 +1,6 @@
 package jpfds.abs;
 
-public interface IntSetAlgebra<S extends IntSetAlgebra<S>> {
+public interface SetAlgebra<S extends SetAlgebra<S>> {
   S empty();
   S union(S that);
   S inter(S that);

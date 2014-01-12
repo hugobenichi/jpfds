@@ -3,7 +3,7 @@ package jpfds.col;
 import jpfds.abs.*;
 
 public abstract class IntBST
-    implements Container, IntSet, IntSetAssoc<IntBST>, MonoidCol<IntBST> {
+    implements Container, IntSet, IntSetAssoc<IntBST>, SetAlgebra<IntBST> {
 
   /* IntSet */
   abstract public boolean has(int elem);
