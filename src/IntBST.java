@@ -1,6 +1,7 @@
-//package jpfds.impl;
+package jpfds.impl;
 
-//import jpfds.IntSet;
+import jpfds.IntSet;
+import jpfds.Monoid;
 
 public abstract class IntBST implements IntSet<IntBST>, Monoid<IntBST> {
 

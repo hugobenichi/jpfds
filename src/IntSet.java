@@ -1,4 +1,4 @@
-//package jpfds;
+package jpfds;
 
 // move to native
 // abstract has modifiable collection
