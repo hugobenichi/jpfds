@@ -1,10 +1,6 @@
-Build:
-
-  decide on build tool: ant ? maven ? custom with rake ?
-
 IntBst:
-  add iterator interface
-  add equality
+  implement java Collection, Set, Iterable
+  add equality as static method
 
 Interfaces:
     remove container and put has(int) into IntSet
@@ -16,9 +12,13 @@ Interfaces:
     abstract add/remove abstraction (check clojure api)
     type the recursive thing correctly
 
+Build:
+  integrate with jruby rake + ant build
+
 Tests:
 
-  Add test framework
+  add contract test, for now as ruby module for every contracts and their mixes
+
 
   Contract api that takes an interface and verify propertie on the interface
   can then be combined with a Generator of concrete implementation

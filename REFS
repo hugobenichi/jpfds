@@ -1,0 +1,39 @@
+Clojure Collection frameworks
+
+    Coll:
+      conj: x C * x -> x C
+      seq: x C -> x Seq
+      count: x C -> int
+      empty: x C -> x C
+      eq: x C * x C -> bool
+    Seq:
+      first: x E -> x
+      rest: E Seq -> E Seq
+    Associative:
+      assoc: k v A * k * v -> k v A
+      dissoc: k v A * k -> k v A
+      get: k v A * k -> v (return nil if no key)
+      contains: k v A * k -> bool (work on key, not value)
+    Indexed:
+      nth: int * x I -> x (or OutOfBound Ex)
+    Stack:
+      conj (same as before)
+      pop: x L -> x L
+      peek: x L -> x
+    Set tools: subset, superset, union, intersection, project
+    Sorted:
+      rseq: v S -> v Seq
+      subseq: v S * v * v -> v Seq
+      rsubseq: v S * v * v -> v Seq
+
+Clojure concrete data structure (all extends Coll and Seq)
+
+  List
+  Vector < Assoc, Indexed, Stack, Sorted
+  Set <  Assoc (degenerate)
+  Map < Assoc
+  SortedSet < Assoc, Sorted
+  SortedMap < Assoc, Sorted (colleciton of Key,Value pairs)
+
+Source:
+    https://github.com/clojure/clojure/tree/master/src/jvm/clojure/lang
