@@ -1,43 +1,58 @@
 package jpfds.abs;
 
+import java.util.Optional;
+import java.util.Spliterator;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
+// add standard java collection implementation
 public interface Seq<E> extends Stream<E>, Iterable<E> {
-
-  boolean isEmpty();
-  default: boolean nonEmpty() { return !isEmpty(): }
 
   Seq<E> tail();
   E head();
-  default: Optional<E> headOpt() {
+
+  boolean isEmpty();
+  default boolean nonEmpty() { return !isEmpty(): }
+
+  default Optional<E> headOpt() {
     if (isEmpty())
-      return new Optional(head());
+      return Optional.ofNullable(head());
     else
-      return None;
-  }
-  default E headOr(Producer<E> prod) {
-    if (isEmpty())
-      return head();
-    else
-      return prod();
+      return Optional.empty();
   }
 
-  default: Iterator<E> iterator() {
-    return new Iterator<E> {
+  default E headOr(Supplier<E> prod) {
+    if (isEmpty()) return head(); else return prod.get();
+  }
+
+  default Iterator<E> iterator() {
+    return new Iterator<>() {
       Seq<E> seq = this;
+      public void remove() { throw removeException; }
       public boolean hasNext() { return seq.nonEmpty(); }
       public E next() {
         E nextValue = seq.head();
         seq = seq.tail();
         return nextValue;
       }
-      public void remove() {
-        // cache this in constant object
-        throw new UnsupportedException(
-          "Immutable sequences do not support remove().");
-      }
   }
 
-  default: Stream<E> stream();
+  default Stream<E> stream() {
+    // to implement properly, use StreamSupport.stream(spliterator, false);
+    // where the spliterator arg implements  java.util.Spliterator
+    /*
+    return StreamSupport.stream(
+      new Spliterator<E>() {
+
+      },
+      false);
+    */
+    return null;
+  }
+
+  final RuntimeException removeException =
+    new UnsupportedOperationException(
+      "Immutable Seq objects do not support remove().");
 
 }
