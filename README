@@ -4,15 +4,20 @@ This project contains Java implementations of some of the immutable and
 persistent data structures described in the book "Purely Functional Data
 Structures" by Chris Okasaki.
 
-In addition it will try to incorporate ideas found in clojure libraries like
-clojure.core.reducer or transients.
+In addition this project incorporate ideas found in Clojure collection
+libraries like clojure.core.reducer or transients, and loosely follows
+its collection abstractions.
 
 It is essentially a personal exercise in comprehension and assimilation.
 
-The implementations will be based on java 8 and make use of the lambda
-feature as well as the new standard functional interfaces. This project
-briefly started as a Scala project until I decided to instead use plain
-Java after asking myself about the long term value of Scala source code,
-especially for the purpose of writing jvm based libraries.
+The implementations will be based on Java 8 and make use of the new lambdas
+and functional interface features, as well as the possibility for default
+implementation in interfaces.
+
+This project briefly started as a Scala project until I decided to instead
+use plain Java after asking myself about the long term value of writing jvm
+based libraries in Scala, and realizing that the new features of java 8 now
+offers much of what is needed for developing and using functional oriented
+api and libraries in a practical way for both producers and consumers.
 
 --------------------------------------------------------------------------------

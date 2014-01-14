@@ -1,24 +1,15 @@
 IntBst:
   implement java Collection, Set, Iterable
-  add equality as static method
+  add equality method
 
 Interfaces:
-    remove container and put has(int) into IntSet
-
-    add a countable interface with a size method
-
-  IntSet ->
-    abstract empty and merge as part of monoid interface
-    abstract add/remove abstraction (check clojure api)
-    type the recursive thing correctly
+  Seq: Add default implementation for java Collection and List
+  Work out the a prototype abstraction for Vec (not extandable one)
+  Work out the a prototype abstraction for Map (not extandable one)
 
 Build:
-  integrate with jruby rake + ant build
+  make rake use the jruby nailgun server
+  don't print ruby stack traces when errors in build
 
 Tests:
-
   add contract test, for now as ruby module for every contracts and their mixes
-
-
-  Contract api that takes an interface and verify propertie on the interface
-  can then be combined with a Generator of concrete implementation
