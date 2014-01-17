@@ -1,12 +1,22 @@
 require 'ant'
 require 'pathname'
 
+Rake.application.options.trace = false
+
 project_dir = Pathname.new(__FILE__).dirname
 class_dir = project_dir.to_path + '/build'
 
 # TODO: find a way to hook efficiently to nailgun jruby process
 Dir.chdir project_dir     # unless ng server runs in same dir
 $CLASSPATH << class_dir   # add compile classes directory to java classpath
+
+def ant_do method, *args
+  begin
+    ant.send method, *args
+  rescue
+    raise "failed to invoke ant target :%s" % method
+  end
+end
 
 # TODO: pass this as environment
 dir = {
@@ -21,8 +31,8 @@ dir = {
 compile_options = {
   :srcdir   => dir[:src],
   :destdir  => dir[:classes],
-  :source   => '1.7',
-  :target   => '1.7'
+  :source   => '1.8',
+  :target   => '1.8'
 }
 
 # TODO: pass this as environment conf
@@ -31,7 +41,7 @@ jarname = 'FooBarBaz.jar'
 desc 'compile java sources'
 task :build do
   ant.mkdir :dir => dir[:classes]
-  ant.javac compile_options
+  ant_do :javac, compile_options
 end
 
 desc 'run all tests'
