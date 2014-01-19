@@ -6,13 +6,13 @@ import java.util.stream.Stream;
 
 // add standard java collection implementation
 // add stream implem ?
-public interface Seq<X> extends Iterable<X> {
+public interface Seq<X> extends Container, Iterable<X> {
+
+
+  /* base methods of the Seq api */
 
   Seq<X> tail();
   X head();
-
-  boolean isEmpty();
-  default boolean nonEmpty() { return !isEmpty(); }
 
   default Optional<X> headOpt() {
     if ( isEmpty() )
@@ -24,6 +24,9 @@ public interface Seq<X> extends Iterable<X> {
   default X headOr(Supplier<X> prod) {
     if ( isEmpty() ) return head(); else return prod.get();
   }
+
+
+  /* Java standard utilities */
 
   default Iterator<X> iterator() {
     final Seq<X> self = this;
@@ -54,6 +57,6 @@ public interface Seq<X> extends Iterable<X> {
 
   final RuntimeException removeException =
     new UnsupportedOperationException(
-      "Iterator over immutable Seq objects do not support #remove().");
+      "Iterators over immutable Seq objects do not support #remove().");
 
 }

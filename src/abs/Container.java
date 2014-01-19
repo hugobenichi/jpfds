@@ -2,5 +2,5 @@ package jpfds.abs;
 
 public interface Container {
   boolean isEmpty();
-  boolean nonEmpty();
+  default boolean nonEmpty() { return !isEmpty(); }
 }

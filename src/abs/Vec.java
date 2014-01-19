@@ -6,29 +6,16 @@ import java.util.stream.Stream;
 
 // add standard java collection implementation
 // add stream implem ?
+// add ordered index interface
+// implemnent Seq via slices for tail
 public interface Vec<X>
-    extends Iterable<X>, IntFunction<X>, IntPredicate, BooleanSupplier {
+    extends Container, Countable, Iterable<X>, IntFunction<X>, IntPredicate {
 
-  // implemnent Seq via slices for tail
 
-  int size();
+  /* base methods of the Vec api */
+
   boolean has(int index);
   X get(int index);
-
-  boolean isEmpty();
-  default boolean nonEmpty() { return !isEmpty(); }
-
-  /* as an IntFunction */
-  // TODO: put default implementation into the int -> X mapping api
-  default X apply(int value) { return get(value); }
-
-  /* as an IntPredicate */
-  // TODO: put default implementation into the int set api (that int -> X implements)
-  default boolean test(int value) { return has(value); }
-
-  /* as boolean supplier */
-  // TODO: put default implementation into the raw Container api
-  default boolean getAsBoolean() { return !isEmpty(); }
 
   default Optional<X> getOp(int i) {
     if ( has(i) )
@@ -40,6 +27,20 @@ public interface Vec<X>
   default X getOr(int i, Supplier<X> prod) {
     if ( has(i) ) return get(i); else return prod.get();
   }
+
+
+  /* Vec reprensentation as functions */
+
+  /* as an IntFunction */
+  // TODO: put default implementation into the int -> X mapping api
+  default X apply(int value) { return get(value); }
+
+  /* as an IntPredicate */
+  // TODO: put default implementation into the int set api (that int -> X implements)
+  default boolean test(int value) { return has(value); }
+
+
+  /* Java standard utilities */
 
   default Iterator<X> iterator() {
     final Vec<X> vec = this;
