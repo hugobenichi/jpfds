@@ -4,12 +4,9 @@ IntBst:
 
 Interfaces:
   Seq: Add default implementation for java Collection and List
-  Work out the a prototype abstraction for Vec (not extandable one)
-  Work out the a prototype abstraction for Map (not extandable one)
 
 Build:
   make rake use the jruby nailgun server
-  don't print ruby stack traces when errors in build
 
 Tests:
   add contract test, for now as ruby module for every contracts and their mixes
