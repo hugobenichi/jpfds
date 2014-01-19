@@ -1,44 +1,13 @@
 package jpfds.abs;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
 // add standard java collection implementation
-// add stream implem ?
 // add ordered index interface
-// implemnent Seq via slices for tail
-public interface Vec<X>
-    extends Container, Countable, Iterable<X>, IntSet, IntFunction<X> {
-
-
-  /* base methods of the Vec api */
-  X get(int index);
-
-  default Optional<X> getOp(int i) {
-    if ( has(i) )
-      return Optional.ofNullable(get(i));
-    else
-      return Optional.empty();
-  }
-
-  default X getOr(int i, Supplier<X> prod) {
-    if ( has(i) ) return get(i); else return prod.get();
-  }
-
-
-  /* Vec reprensentation as functions */
-
-  /* as an IntFunction */
-  // TODO: put default implementation into the int -> X mapping api
-  default X apply(int value) { return get(value); }
-
-  /* as an IntPredicate */
-  // TODO: put default implementation into the int set api (that int -> X implements)
-  default boolean test(int value) { return has(value); }
-
-
-  /* Java standard utilities */
+// implement Seq via slices for tail
+public interface Vec<X> extends Container, Countable, Iterable<X>, IntFun<X> {
 
   default Iterator<X> iterator() {
     final Vec<X> vec = this;
