@@ -9,12 +9,10 @@ import java.util.stream.Stream;
 // add ordered index interface
 // implemnent Seq via slices for tail
 public interface Vec<X>
-    extends Container, Countable, Iterable<X>, IntFunction<X>, IntPredicate {
+    extends Container, Countable, Iterable<X>, IntSet, IntFunction<X> {
 
 
   /* base methods of the Vec api */
-
-  boolean has(int index);
   X get(int index);
 
   default Optional<X> getOp(int i) {
