@@ -23,6 +23,8 @@ import jpfds.abs.Expandable;
 //
 // look at covariant return type for tail() and see if I can return a List
 //    see if it generates brigdes ?
+//
+// check how safe the casts here are
 
 public class List<X> implements Seq<X> {
 //public class List<X> implements Seq<X>, Expandable<X, List<X>> {
@@ -37,11 +39,15 @@ public class List<X> implements Seq<X> {
   private static Object emptyList = new EmptyList();
 
   private final X head;
-  private final Seq<X> tail;
+  private Seq<X> tail;
 
   private List(X head, Seq<? extends X> tail) {
     this.head = head;
     this.tail = (Seq<X>) tail;
+  }
+
+  private List(X head) {
+    this(head, (Seq<X>) emptyList);
   }
 
   public boolean isEmpty() { return false; }
@@ -63,5 +69,49 @@ public class List<X> implements Seq<X> {
   }
 
   private static <X> Seq<X> of(X... args) { return of(args); }
+
+  private static class EmptyListBuilder<X> implements SeqBuilder<X> {
+    public SeqBuilder<X> cons(X elem) { return new ListBuilder(elem); }
+    public SeqBuilder<X> add(X elem) { return cons(elem); }
+    public SeqBuilder<X> concat(SeqBuilder<? extends X> that) {
+      // is this cast safe ??
+      return (SeqBuilder<X>) that;
+    }
+    public Seq<X> toSeq() { return (Seq<X>) emptyList; }
+  }
+
+  private static class ListBuilder<X> implements SeqBuilder<X> {
+
+    private List<X> head;
+    private List<X> end;
+
+    public ListBuilder(X elem) {
+      this.head = new List(elem);
+      this.end = this.head;
+    }
+
+    public SeqBuilder<X> cons(X elem) {
+      this.head = new List(elem, this.head);
+      return this;
+    }
+    public SeqBuilder<X> add(X elem) {
+      List<X> newTail = new List(elem);
+      this.end.tail = newTail;
+      this.end = newTail;
+      return this;
+    }
+    public SeqBuilder<X> concat(SeqBuilder<? extends X> that) {
+      //does not work, need to try casting to own type or fallback to default
+      //this.end.tail = that.head;
+      //this.end = that.end;
+      return this;
+      // don't forget to kill the that builder;
+    }
+    public Seq<X> toSeq() {
+      // set end next to empty, unless it s empty
+      // unset List to avoid double call to toSeq
+      return this.head;
+    }
+  }
 
 }
