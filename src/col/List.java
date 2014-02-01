@@ -30,9 +30,13 @@ import jpfds.abs.ColBuilder;
 public class List<X> implements Seq<X> {
 
   private static class EmptyList implements Seq<Object> {
-      public boolean isEmpty() { return true; }
-      public Seq<Object> tail() { throw new RuntimeException("Empty list has no tail"); }
-      public Object head() { throw new RuntimeException("Empty list has no head"); }
+    public boolean isEmpty() { return true; }
+    public Object head() { throw headException; }
+    public Seq<Object> tail() { throw tailException; }
+    private static final RuntimeException headException =
+      new RuntimeException("Empty list has no head");
+    private static final RuntimeException tailException =
+      new RuntimeException("Empty list has no tail");
   }
 
   private static Object emptyList = new EmptyList();
