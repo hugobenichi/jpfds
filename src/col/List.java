@@ -37,16 +37,17 @@ public class List<X> implements Seq<X> {
   }
 
   private static Object emptyList = new EmptyList();
+  public static <X> List<X> emptyList() { return (List<X>) emptyList; }
 
   private final X head;
   private Seq<X> tail;
 
-  private List(X head, Seq<? extends X> tail) {
+  public List(X head, Seq<? extends X> tail) {
     this.head = head;
     this.tail = (Seq<X>) tail;
   }
 
-  private List(X head) {
+  public List(X head) {
     this(head, (Seq<X>) emptyList);
   }
 

@@ -4,12 +4,18 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-// add standard java collection implementation ?
-// add stream implem ?
-public interface Seq<X> extends Container, Iterable<X> {
+import jpfds.col.List;
+
+// add standard java collection and stream implementation ?
+public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
 
   Seq<X> tail();
   X head();
+
+  default Seq<X> seq() { return this; }
+  default Seq<X> cons(X elem) { return new List(elem, this); }
+  default Seq<X> empty() { return List.emptyList(); }
+  default Seq<X> union(Seq<X> col) { return this; } // dummy
 
   default Optional<X> headOpt() {
     if ( isEmpty() )
