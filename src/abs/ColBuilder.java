@@ -2,6 +2,7 @@ package jpfds.abs;
 
 // ColBuilder is implemented as ColBuilder<X,Seq<X>>
 public interface ColBuilder<X,C> {
+    C make();
     ColBuilder<X,C> cons(X elem);
     ColBuilder<X,C> add(X elem);
     default ColBuilder<X,C> addAll(Iterable<? extends X> elems) {
@@ -9,6 +10,9 @@ public interface ColBuilder<X,C> {
       for (X elem : elems) { bld = bld.add(elem); }
       return bld;
     }
-    ColBuilder<X,C> concat(ColBuilder<X,C> that);
-    C make();
+    //does not work, need to try casting to own type or fallback to default
+    // needs F-bounded polymorphism to be interesting
+    // this function would be usefull for linear collections for rebuilding
+    // segments efficiently (used by Folder / Merger for parallel cols)
+    //ColBuilder<X,C> concat(ColBuilder<X,C> that);
 }
