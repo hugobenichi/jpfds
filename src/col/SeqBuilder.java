@@ -1,6 +1,7 @@
 package jpfds.col;
 
 import jpfds.abs.Seq;
+import jpfds.abs.ColBuilder;
 
 // todo: which interface for Reducible ? Transient
 //        implements Iterable, Seq ?

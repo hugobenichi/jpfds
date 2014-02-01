@@ -4,12 +4,9 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-// add standard java collection implementation
+// add standard java collection implementation ?
 // add stream implem ?
 public interface Seq<X> extends Container, Iterable<X> {
-
-
-  /* base methods of the Seq api */
 
   Seq<X> tail();
   X head();
@@ -24,9 +21,6 @@ public interface Seq<X> extends Container, Iterable<X> {
   default X headOr(Supplier<X> prod) {
     if ( isEmpty() ) return head(); else return prod.get();
   }
-
-
-  /* Java standard utilities */
 
   default Iterator<X> iterator() {
     final Seq<X> self = this;
