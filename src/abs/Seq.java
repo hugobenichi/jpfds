@@ -2,11 +2,10 @@ package jpfds.abs;
 
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import jpfds.col.List;
+import jpfds.col.EmptySeq;
 
-// add standard java collection and stream implementation ?
 public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
 
   Seq<X> tail();
@@ -14,7 +13,7 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
 
   default Seq<X> seq() { return this; }
   default Seq<X> cons(X elem) { return new List(elem, this); }
-  default Seq<X> empty() { return List.emptyList(); }
+  default Seq<X> empty() { return EmptySeq.get(); }
   default Seq<X> union(Seq<X> col) { return this; } // dummy
 
   default Optional<X> headOpt() {
@@ -42,18 +41,17 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
     };
   }
 
-  default Stream<X> stream() {
-    // to implement properly, use StreamSupport.stream(spliterator, false);
-    // where the spliterator arg implements  java.util.Spliterator
-    /*
-    return StreamSupport.stream(
-      new Spliterator<E>() {
-
-      },
-      false);
-    */
-    return null;
+  static <Y> Seq<Y> cons(Y elem, Seq<? extends Y> seq) {
+    return new List(elem, seq);
   }
+
+  static <X> Seq<X> of(Iterable<X> elems) {
+    Seq<X> ls = EmptySeq.get();
+    for (X elem : elems) { ls = cons(elem, ls); }
+    return ls;
+  }
+
+  static <X> Seq<X> of(X... args) { return of(args); }
 
   final RuntimeException removeException =
     new UnsupportedOperationException(

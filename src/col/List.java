@@ -26,21 +26,7 @@ import jpfds.abs.ColBuilder;
 //
 // check how safe the casts here are
 
-// remove List and hide it inside Seq
 public class List<X> implements Seq<X> {
-
-  private static class EmptyList implements Seq<Object> {
-    public boolean isEmpty() { return true; }
-    public Object head() { throw headException; }
-    public Seq<Object> tail() { throw tailException; }
-    private static final RuntimeException headException =
-      new RuntimeException("Empty list has no head");
-    private static final RuntimeException tailException =
-      new RuntimeException("Empty list has no tail");
-  }
-
-  private static Object emptyList = new EmptyList();
-  public static <X> List<X> emptyList() { return (List<X>) emptyList; }
 
   private final X head;
   private Seq<X> tail;
@@ -51,57 +37,48 @@ public class List<X> implements Seq<X> {
   }
 
   public List(X head) {
-    this(head, (Seq<X>) emptyList);
+    this(head, EmptySeq.get());
   }
 
   public boolean isEmpty() { return false; }
   public Seq<X> tail() { return tail; }
   public X head() {return head; }
-  // how can I have convariant construction with instance method ?
-  public List<X> cons(X elem) { return new List(elem, this); }
 
-  // can have covariant construction
-  // this can be done with Seq also
-  private static <X> List<X> cons(X elem, Seq<? extends X> tail) {
-    return new List(elem, tail);
+  private static class EmptySeqBuilder<X> implements ColBuilder<X,Seq<X>> {
+    private EmptySeqBuilder() {}
+    private static final EmptySeqBuilder<Object> theEmptySeqBuilder =
+      new EmptySeqBuilder<>();
+    public static <X> EmptySeqBuilder<X> get() {
+      return (EmptySeqBuilder<X>) theEmptySeqBuilder;
+    }
+    public Seq<X> make() { return EmptySeq.get(); }
+    public SeqBuilder<X> cons(X elem) { return new SeqBuilder(elem); }
+    public SeqBuilder<X> add(X elem) { return cons(elem); }
   }
 
-  private static <X> Seq<X> of(Iterable<X> elems) {
-    Seq<X> ls = (Seq<X>) emptyList;
-    for (X elem : elems) { ls = cons(elem, ls); }
-    return ls;
-  }
-
-  private static <X> Seq<X> of(X... args) { return of(args); }
-
-  // this should be instantiate once
-  private static class EmptyListBuilder<X> implements ColBuilder<X,List<X>> {
-    public List<X> make() { return emptyList(); }
-    public ListBuilder<X> cons(X elem) { return new ListBuilder(elem); }
-    public ListBuilder<X> add(X elem) { return cons(elem); }
-  }
-
-  private static class ListBuilder<X> implements ColBuilder<X,List<X>> {
+  private static class SeqBuilder<X> implements ColBuilder<X,Seq<X>> {
 
     private List<X> head;
     private List<X> end;
 
-    public ListBuilder(X elem) {
+    public SeqBuilder(X elem) {
       this.head = new List(elem);
       this.end = this.head;
     }
 
-    public ListBuilder<X> cons(X elem) {
+    public SeqBuilder<X> cons(X elem) {
       this.head = new List(elem, this.head);
       return this;
     }
-    public ListBuilder<X> add(X elem) {
+
+    public SeqBuilder<X> add(X elem) {
       List<X> newTail = new List(elem);
       this.end.tail = newTail;
       this.end = newTail;
       return this;
     }
-    public List<X> make() {
+
+    public Seq<X> make() {
       // set end next to empty, unless it s empty
       // unset List to avoid double call to toSeq
       return this.head;

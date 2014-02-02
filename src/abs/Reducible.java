@@ -7,10 +7,6 @@ import java.util.function.Predicate;
 public interface Reducible<X> {
     <Y> Y reduce(Y seed, BiFunction<Y, ? extends X,Y> f);
 
-    //<C extends Col<X>> C into(Col<? extends X,C> receiver);
-
-    //<C extends Col<X>> C into(ColBuilder<X,C> builder);
-
     //<C> C into(Col<X,C> receiver); // this function is broken
 
     <C> C into(ColBuilder<X,C> builder);
