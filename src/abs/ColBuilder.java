@@ -10,9 +10,17 @@ public interface ColBuilder<X,C> {
       for (X elem : elems) { bld = bld.add(elem); }
       return bld;
     }
-    //does not work, need to try casting to own type or fallback to default
-    // needs F-bounded polymorphism to be interesting
-    // this function would be usefull for linear collections for rebuilding
-    // segments efficiently (used by Folder / Merger for parallel cols)
-    //ColBuilder<X,C> concat(ColBuilder<X,C> that);
+
+// does not work unless I replace C with the properly typed col
+//    default C concat(C col) {
+//      ColBuilder<X,C> bld = this;
+//      for (X elem: C) { bld = bld.add(elem); }
+//      return bld.make();
+//    }
+
+// does not work, need to try casting to own type or fallback to default
+// needs F-bounded polymorphism to be interesting
+// this function would be usefull for linear collections for rebuilding
+// segments efficiently (used by Folder / Merger for parallel cols)
+//    ColBuilder<X,C> concat(ColBuilder<X,C> that);
 }
