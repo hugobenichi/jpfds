@@ -14,7 +14,12 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
   default Seq<X> seq() { return this; }
   default Seq<X> cons(X elem) { return new List(elem, this); }
   default Seq<X> empty() { return EmptySeq.get(); }
-  default Seq<X> union(Seq<X> col) { return this; } // dummy
+  default Seq<X> union(Seq<X> col) {
+    SeqBuilder<X> bld = builder();
+    //bld = bld.addAll(this);
+    for (X elem : this) { bld = (SeqBuilder<X>) bld.add(elem); } //super ugly
+    return bld.concat(col);
+  }
 
   default Optional<X> headOpt() {
     if ( isEmpty() )
@@ -45,17 +50,15 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
     return new List(elem, seq);
   }
 
+  static <X> SeqBuilder<X> builder() { return SeqBuilder.get(); }
+
   static <X> Seq<X> of(Iterable<X> elems) {
-    Seq<X> ls = EmptySeq.get();
-    for (X elem : elems) { ls = cons(elem, ls); }
-    return ls;
+    ColBuilder<X,Seq<X>> bld = builder();
+    for (X elem : elems) { bld = bld.add(elem); }
+    return bld.make();
   }
 
   static <X> Seq<X> of(X... args) { return of(args); }
-
-  static <X> ColBuilder<X,Seq<X>> builder() {
-    return List.builder();
-  }
 
   final RuntimeException removeException =
     new UnsupportedOperationException(

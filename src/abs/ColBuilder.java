@@ -4,6 +4,7 @@ public interface ColBuilder<X,C> {
     C make();
     ColBuilder<X,C> cons(X elem);
     ColBuilder<X,C> add(X elem);
+    // not usefull, need to return its own type -_-
     default ColBuilder<X,C> addAll(Iterable<? extends X> elems) {
       ColBuilder<X,C> bld = this;
       for (X elem : elems) { bld = bld.add(elem); }
