@@ -5,20 +5,40 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 public interface Reducible<X> {
-    <Y> Y reduce(Y seed, BiFunction<Y, ? extends X,Y> f);
+    <Y> Y reduce(Y seed, BiFunction<Y, ? super X,Y> f);
 
     //<C> C into(Col<X,C> receiver); // this function is broken
 
-    <C> C into(ColBuilder<X,C> builder);
+    default <C> C into(ColBuilder<X,C> builder) {
+      BiFunction<ColBuilder<X,C>,X,ColBuilder<X,C>> reducer =
+      new BiFunction<ColBuilder<X,C>,X,ColBuilder<X,C>>() {
+        public ColBuilder<X,C> apply(ColBuilder<X,C> bld, X elem) {
+          return bld.add(elem);
+        }
+      };
+      return this.reduce(builder, reducer).make();
+    }
 
-    <Y> Reducible<Y> map(Function<? super X,Y> f);
+    default <Y> Reducible<Y> map(final Function<? super X,Y> f) {
+      final Reducible<X> source = this;
+      return new Reducible<Y>() {
+        public <Z> Z reduce(Z seed, BiFunction<Z, ? super Y,Z> g) {
+          final BiFunction<Z,X,Z> gof = new BiFunction<Z,X,Z>() {
+            public Z apply(Z z, X x) { return g.apply(z, f.apply(x)); }
+          };
+          return source.reduce(seed, gof);
+        }
+      };
+    }
 
-    Reducible<X> filter(Predicate<? super X> f);
+    //default Reducible<X> filter(Predicate<? super X> f);
 
-    <Y> Reducible<Y> flatMap(Function<? super X,Reducible<? extends Y>> f);
+    //default <Y> Reducible<Y> flatMap(Function<? super X,Reducible<? extends Y>> f);
+
     // skip(int n) //lazy, ignore n first elems
     // take(int n) //lazy, only considr n first elems
     // drop(int n) //lazy, 
     // until(Predicate) //lazy, keep elements until the Predicate holds true
     // from(Predicate) //lazy, skip elements until the Predicate holds false
+
 }
