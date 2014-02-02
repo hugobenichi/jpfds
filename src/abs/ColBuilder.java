@@ -1,6 +1,5 @@
 package jpfds.abs;
 
-// ColBuilder is implemented as ColBuilder<X,Seq<X>>
 public interface ColBuilder<X,C> {
     C make();
     ColBuilder<X,C> cons(X elem);

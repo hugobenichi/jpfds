@@ -3,29 +3,10 @@ package jpfds.col;
 import jpfds.abs.Seq;
 import jpfds.abs.ColBuilder;
 
-// how to return a tail type as List which can be built upon
-//    a) only use cons() as a static method onto Seq as tail (can mix Seq types)
-//    b) self-type Seq to allow tail() to keep the type
-//    c) introduce ESeq that wraps Seq to have tail keep type ?
-//
-// how to share Empty list with generic typing
-//    a) implements head / tail / cons as static method with casting
-//    b) use base abstract class ?
-//
-// should I have pure List (tail is always a List), or unpure List ?
-//    maybe add a static cons() function in Seq interface to build mixed List
-//
-// maybe offer both an instance method cons() that does not allow covariance
-//    and a static constructor method for covariance
-//
 // if allow mixed List, I can add a specialized ArrayList with fast access
 // what about mixe ArrayList / LinkedList
 //
-// look at covariant return type for tail() and see if I can return a List
-//    see if it generates brigdes ?
-//
 // check how safe the casts here are
-
 public class List<X> implements Seq<X> {
 
   private final X head;
@@ -43,6 +24,10 @@ public class List<X> implements Seq<X> {
   public boolean isEmpty() { return false; }
   public Seq<X> tail() { return tail; }
   public X head() {return head; }
+
+  public static <X> ColBuilder<X,Seq<X>> builder() {
+    return EmptySeqBuilder.get();
+  }
 
   private static class EmptySeqBuilder<X> implements ColBuilder<X,Seq<X>> {
     private EmptySeqBuilder() {}

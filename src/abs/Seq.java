@@ -53,6 +53,10 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
 
   static <X> Seq<X> of(X... args) { return of(args); }
 
+  static <X> ColBuilder<X,Seq<X>> builder() {
+    return List.builder();
+  }
+
   final RuntimeException removeException =
     new UnsupportedOperationException(
       "Iterators over immutable Seq objects do not support #remove().");
