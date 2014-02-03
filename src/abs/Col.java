@@ -21,6 +21,6 @@ public interface Col<X,C extends Col<X,C>> extends Iterable<X> {
     return (C) col;
   }
 
-  default BiFunction<C,X,C> reducer() { return (C c, X e) -> c.cons(e); }
+  default BiFunction<C,X,C> reducer() { return (c,e) -> c.cons(e); }
 
 }
