@@ -5,9 +5,12 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 public interface Reducible<X> {
+
     <Y> Y reduce(Y seed, BiFunction<Y, ? super X,Y> f);
 
-    //<C> C into(Col<X,C> receiver); // this function is broken
+    default <C extends Col<X,C>> C into(C col) {
+      return reduce(col.empty(), col.reducer());
+    }
 
     default <C> C into(ColBuilder<X,C> builder) {
       BiFunction<ColBuilder<X,C>,X,ColBuilder<X,C>> reducer =
