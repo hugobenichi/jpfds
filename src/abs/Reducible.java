@@ -9,7 +9,11 @@ public interface Reducible<X> {
     <Y> Y reduce(Y seed, BiFunction<Y, ? super X,Y> f);
 
     default <C extends Col<X,C>> C into(C col) {
-      return reduce(col.empty(), col.reducer());
+      return reduce(col, col.reducer());
+    }
+
+    default <B extends Builder<X,B,C>,C extends Col<X,C>> C into(B builder) {
+      return reduce(builder, builder.reducer()).make();
     }
 
     default <C> C into(ColBuilder<X,C> builder) {
