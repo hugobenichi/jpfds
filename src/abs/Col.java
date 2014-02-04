@@ -14,16 +14,13 @@ public interface Col<X,C extends Col<X,C>> extends Iterable<X> {
   C empty();
   C union(C col);
 
-  C cons(X elem); // rename to add ?
-  default C consAll(Iterable<X> elems) {
+  C add(X elem);
+  default C addAll(Iterable<X> elems) {
     Col<X,C> col = this;
-    for (X elem : elems) { col = col.cons(elem); }
+    for (X elem : elems) { col = col.add(elem); }
     return (C) col;
   }
 
-  default C add(X elem) { return this.cons(elem); }
-  default C addAll(Iterable<X> elems) { return this.consAll(elems); }
-
-  default BiFunction<C,X,C> reducer() { return (c,e) -> c.cons(e); }
+  default BiFunction<C,X,C> reducer() { return (c,e) -> c.add(e); }
 
 }

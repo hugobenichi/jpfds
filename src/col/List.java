@@ -37,6 +37,7 @@ public class List<X> implements Seq<X> {
     }
     public Seq<X> make() { return EmptySeq.get(); }
     public SeqBuilder<X> cons(X elem) { return new ListBuilder(elem); }
+    public SeqBuilder<X> add(X elem) { return cons(elem); }
     public boolean isEmpty() { return true; }
     public SeqBuilder<X> union(SeqBuilder<X> that) { return that; }
   }

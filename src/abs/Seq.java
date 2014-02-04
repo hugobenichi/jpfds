@@ -13,6 +13,7 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
 
   default Seq<X> seq() { return this; }
   default Seq<X> cons(X elem) { return new List(elem, this); }
+  default Seq<X> add(X elem) { return cons(elem); }
   default Seq<X> empty() { return EmptySeq.get(); }
   default Seq<X> union(Seq<X> that) {
     SeqBuilder<X> bld = builder();

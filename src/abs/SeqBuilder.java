@@ -5,6 +5,7 @@ import jpfds.col.List;
 public abstract class SeqBuilder<X> implements Builder<X,SeqBuilder<X>,Seq<X>> {
   public abstract boolean isEmpty();
   public abstract SeqBuilder<X> cons(X elem);
+  public abstract SeqBuilder<X> add(X elem);
   public abstract SeqBuilder<X> union(SeqBuilder<X> col);
   public abstract Seq<X> make();
   public Seq<X> seq() { return make(); }
