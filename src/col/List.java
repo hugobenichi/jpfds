@@ -24,13 +24,11 @@ public class List<X> implements Seq<X> {
 
   public boolean isEmpty() { return false; }
   public Seq<X> tail() { return tail; }
-  public X head() {return head; }
+  public X head() { return head; }
 
-  public static <X> SeqBuilder<X> builder() {
-    return EmptySeqBuilder.get();
-  }
+  public static <X> SeqBuilder<X> builder() { return EmptySeqBuilder.get(); }
 
-  private static class EmptySeqBuilder<X> implements SeqBuilder<X> {
+  private static class EmptySeqBuilder<X> extends SeqBuilder<X> {
     private EmptySeqBuilder() {}
     private static final EmptySeqBuilder<Object> theEmptySeqBuilder =
       new EmptySeqBuilder<>();
@@ -38,12 +36,12 @@ public class List<X> implements Seq<X> {
       return (EmptySeqBuilder<X>) theEmptySeqBuilder;
     }
     public Seq<X> make() { return EmptySeq.get(); }
-    public Seq<X> concat(Seq<X> tail) { return tail; }
     public SeqBuilder<X> cons(X elem) { return new ListBuilder(elem); }
-    public SeqBuilder<X> add(X elem) { return cons(elem); }
+    public boolean isEmpty() { return true; }
+    public SeqBuilder<X> union(SeqBuilder<X> that) { return that; }
   }
 
-  private static class ListBuilder<X> implements SeqBuilder<X> {
+  private static class ListBuilder<X> extends SeqBuilder<X> {
 
     private List<X> head;
     private List<X> end;
@@ -65,16 +63,17 @@ public class List<X> implements Seq<X> {
       return this;
     }
 
-    public Seq<X> make() {
-      // unsafe !! set end next to empty, unless it s empty
-      // unset List to avoid double call to toSeq and avoid mutating List
-      return this.head;
-    }
+    // unsafe !! set end next to empty, unless it s empty
+    // unset List to avoid double call to toSeq and avoid mutating List
+    public Seq<X> make() { return this.head; }
 
     public Seq<X> concat(Seq<X> tail) {
       this.end.tail = tail;
       return make();
     }
+
+    public boolean isEmpty() { return false; }
+    public SeqBuilder<X> union(SeqBuilder<X> that) { return this; } // dummy
   }
 
 }

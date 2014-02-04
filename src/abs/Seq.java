@@ -14,11 +14,9 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
   default Seq<X> seq() { return this; }
   default Seq<X> cons(X elem) { return new List(elem, this); }
   default Seq<X> empty() { return EmptySeq.get(); }
-  default Seq<X> union(Seq<X> col) {
+  default Seq<X> union(Seq<X> that) {
     SeqBuilder<X> bld = builder();
-    //bld = bld.addAll(this);
-    for (X elem : this) { bld = (SeqBuilder<X>) bld.add(elem); } //super ugly
-    return bld.concat(col);
+    return bld.addAll(this).addAll(that).make(); // can't inline, bad inference
   }
 
   default Optional<X> headOpt() {
@@ -53,9 +51,8 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
   static <X> SeqBuilder<X> builder() { return SeqBuilder.get(); }
 
   static <X> Seq<X> of(Iterable<X> elems) {
-    ColBuilder<X,Seq<X>> bld = builder();
-    for (X elem : elems) { bld = bld.add(elem); }
-    return bld.make();
+    SeqBuilder<X> bld = builder();
+    return bld.addAll(elems).make(); // can't inline -> bad inference ?
   }
 
   static <X> Seq<X> of(X... args) { return of(args); }
