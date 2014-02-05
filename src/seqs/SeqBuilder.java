@@ -1,6 +1,7 @@
-package jpfds.abs;
+package jpfds.seqs;
 
-import jpfds.col.List;
+import jpfds.Seq;
+import jpfds.Builder;
 
 public abstract class SeqBuilder<X> implements Builder<X,SeqBuilder<X>,Seq<X>> {
   public abstract boolean isEmpty();

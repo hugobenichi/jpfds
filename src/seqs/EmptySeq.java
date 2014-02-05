@@ -1,9 +1,8 @@
-package jpfds.col;
+package jpfds.seqs;
 
-import jpfds.abs.Seq;
+import jpfds.Seq;
 
 public class EmptySeq implements Seq<Object> {
-
   private EmptySeq() {}
 
   private static final EmptySeq theEmptySeq = new EmptySeq();

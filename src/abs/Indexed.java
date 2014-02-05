@@ -1,5 +1,7 @@
 package jpfds.abs;
 
+import jpfds.Seq;
+
 // TODO: better name for in{,Reverse}Order, move inOrder to Sequable interface
 interface Indexed<X> extends IntFun<X> {
 

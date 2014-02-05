@@ -1,26 +1,28 @@
-package jpfds.col;
+package jpfds.seqs;
 
-import jpfds.abs.Seq;
-import jpfds.abs.SeqBuilder;
-import jpfds.abs.ColBuilder;
+import jpfds.Seq;
 
 public class List<X> implements Seq<X> {
 
   private final X head;
   private Seq<X> tail;
 
-  public List(X head, Seq<? extends X> tail) {
+  private List(X head, Seq<? extends X> tail) {
     this.head = head;
     this.tail = (Seq<X>) tail;
   }
 
-  public List(X head) {
+  private List(X head) {
     this(head, EmptySeq.get());
   }
 
   public boolean isEmpty() { return false; }
   public Seq<X> tail() { return tail; }
   public X head() { return head; }
+
+  public static <X> Seq<X> cons(X elem, Seq<? extends X> tail) {
+    return new List(elem, tail);
+  }
 
   public static <X> SeqBuilder<X> builder() { return EmptySeqBuilder.get(); }
 

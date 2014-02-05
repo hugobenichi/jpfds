@@ -1,4 +1,4 @@
-package jpfds.abs;
+package jpfds;
 
 import java.util.Iterator;
 import java.util.function.BiFunction;
@@ -6,7 +6,7 @@ import java.util.function.BiFunction;
 public interface Col<X,C extends Col<X,C>> extends Iterable<X>, Reducible<X> {
 
   boolean isEmpty();
-  default boolean nonEmpty() { return !isEmpty(); }
+  default boolean nonEmpty() { return !this.isEmpty(); }
 
   Seq<X> seq();
   default Iterator<X> iterator() { return this.seq().iterator(); }
