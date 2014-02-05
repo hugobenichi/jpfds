@@ -1,0 +1,14 @@
+0.1 target
+
+  test and debug Seq code
+  clean Seq code and add doc to interface methods
+  clean Readme (add build instruction)
+  add release note
+  merge vagrant env
+
+0.2 target
+
+  add extras to Reducible
+  add infinite seq constructors (continually, cycle, from supplier, ...)
+  add IntSeq + associated Col/Reducer
+  add IntSet + associate abstraction
