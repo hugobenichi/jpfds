@@ -4,10 +4,6 @@ import jpfds.abs.Seq;
 import jpfds.abs.SeqBuilder;
 import jpfds.abs.ColBuilder;
 
-// if allow mixed List, I can add a specialized ArrayList with fast access
-// what about mixe ArrayList / LinkedList
-//
-// check how safe the casts here are
 public class List<X> implements Seq<X> {
 
   private final X head;
@@ -35,11 +31,12 @@ public class List<X> implements Seq<X> {
     public static <X> EmptySeqBuilder<X> get() {
       return (EmptySeqBuilder<X>) theEmptySeqBuilder;
     }
-    public Seq<X> make() { return EmptySeq.get(); }
+    public boolean isEmpty() { return true; }
     public SeqBuilder<X> cons(X elem) { return new ListBuilder(elem); }
     public SeqBuilder<X> add(X elem) { return cons(elem); }
-    public boolean isEmpty() { return true; }
     public SeqBuilder<X> union(SeqBuilder<X> that) { return that; }
+    public Seq<X> make() { return EmptySeq.get(); }
+    public Seq<X> concat(Seq<X> tail) { return tail; }
   }
 
   private static class ListBuilder<X> extends SeqBuilder<X> {
@@ -74,7 +71,14 @@ public class List<X> implements Seq<X> {
     }
 
     public boolean isEmpty() { return false; }
-    public SeqBuilder<X> union(SeqBuilder<X> that) { return this; } // dummy
+    public SeqBuilder<X> union(SeqBuilder<X> builder) {
+      if (builder instanceof EmptySeqBuilder)
+        return this;
+      ListBuilder<X> that = (ListBuilder<X>) builder;
+      this.end.tail = that.head;
+      this.end = that.end;
+      return this;
+    }
   }
 
 }

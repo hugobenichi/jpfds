@@ -8,6 +8,7 @@ public abstract class SeqBuilder<X> implements Builder<X,SeqBuilder<X>,Seq<X>> {
   public abstract SeqBuilder<X> add(X elem);
   public abstract SeqBuilder<X> union(SeqBuilder<X> col);
   public abstract Seq<X> make();
+  public abstract Seq<X> concat(Seq<X> tail);
   public Seq<X> seq() { return make(); }
   public SeqBuilder<X> empty() { return get(); }
 

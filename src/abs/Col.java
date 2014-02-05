@@ -3,7 +3,7 @@ package jpfds.abs;
 import java.util.Iterator;
 import java.util.function.BiFunction;
 
-public interface Col<X,C extends Col<X,C>> extends Iterable<X> {
+public interface Col<X,C extends Col<X,C>> extends Iterable<X>, Reducible<X> {
 
   boolean isEmpty();
   default boolean nonEmpty() { return !isEmpty(); }
@@ -22,5 +22,10 @@ public interface Col<X,C extends Col<X,C>> extends Iterable<X> {
   }
 
   default BiFunction<C,X,C> reducer() { return (c,e) -> c.add(e); }
+
+  default <Y> Y reduce(Y seed, BiFunction<Y, ? super X,Y> f) {
+    for (X elem : this) { seed = f.apply(seed, elem); }
+    return seed;
+  }
 
 }

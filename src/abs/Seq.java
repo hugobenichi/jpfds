@@ -2,6 +2,7 @@ package jpfds.abs;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.function.BiFunction;
 
 import jpfds.col.List;
 import jpfds.col.EmptySeq;
@@ -10,6 +11,15 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
 
   Seq<X> tail();
   X head();
+
+  default <Y> Y reduce(Y seed, BiFunction<Y, ? super X,Y> f) {
+    Seq<X> seq = this;
+    while (seq.nonEmpty()) {
+      seed = f.apply(seed, seq.head());
+      seq = seq.tail();
+    }
+    return seed;
+  }
 
   default Seq<X> seq() { return this; }
   default Seq<X> cons(X elem) { return new List(elem, this); }
