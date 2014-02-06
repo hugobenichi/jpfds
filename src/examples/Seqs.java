@@ -21,13 +21,18 @@ public final class Seqs {
     int total = xs.map((s) -> s.length()).reduce(0, (t, s) -> t+s);
     cout.println(total);
 
-    //Seq<Integer> is = Seq.of(1,2,3); // builder is broken
-    Seq<Integer> is = Seq.nil();
-    is = is.cons(1).cons(2).cons(3);
+    Seq<Integer> is = Seq.of(1,2,3); // builder is broken
+    //Seq<Integer> is = Seq.nil();
+    is = is.cons(10).cons(20).cons(30);
 
-    is = xs.map((s) -> s.length()).into(is);
+    //is = xs.map((s) -> s.length()).into(is);
 
     is.forEach( (i) -> cout.println(i) );
+    Seq<Integer> si = is.reverse();
+    si.forEach( (i) -> cout.println(i) );
+
+    cout.println(is.size());
+    cout.println(si.size());
 
   }
 

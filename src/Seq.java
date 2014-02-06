@@ -31,6 +31,10 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
     return bld.addAll(this).addAll(that).make(); // can't inline, bad inference
   }
 
+  default Seq<X> reverse() { return this.reduce(empty(), Seq::cons); }
+
+  default int size() { return this.reduce(0, (l,x) -> l + 1); }
+
   default Optional<X> headOpt() {
     if (isEmpty())
       return Optional.ofNullable(head());
@@ -60,14 +64,18 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
     return List.cons(elem, seq);
   }
 
-  static <X> Seq<X> of(Iterable<X> elems) {
-    SeqBuilder<X> bld = List.builder();
+  static <Y> Seq<Y> of(Iterable<Y> elems) {
+    SeqBuilder<Y> bld = List.builder();
     return bld.addAll(elems).make(); // can't inline -> bad inference ?
   }
 
-  static <X> Seq<X> of(X... args) { return of(args); }
+  static <Y> Seq<Y> of(Y... args) {
+    SeqBuilder<Y> bld = List.builder();
+    for (Y elem : args) { bld = bld.add(elem); }
+    return bld.make();
+  }
 
-  static <X> Seq<X> nil() { return EmptySeq.get(); }
+  static <Y> Seq<Y> nil() { return EmptySeq.get(); }
 
   final RuntimeException removeException =
     new UnsupportedOperationException(
