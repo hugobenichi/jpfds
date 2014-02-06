@@ -1,18 +1,17 @@
 IntBst:
-  implement java Collection, Set, Iterable
-  add equality method
-
-Interfaces:
-  Seq: Add default implementation for java Collection and List
+  add IntCol, IntBuilder, IntRed interface
+  rework set interface
 
 Build:
   make rake use the jruby nailgun server
+  add ant task to run a particular class (examples)
+  merge vagrant env
+  add help task, guide task, start nailgun inside vm
 
 Tests:
   add contract test, for now as ruby module for every contracts and their mixes
 
-
-class package organization:
+class package organization: (move into general doc folder)
 
 gen: Col, Red, Builder, Seq, Vec, Set, Fun, Sorted
 int: IntCol, IntRed, IntBuilder, IntSeq, IntVec, IntSet, IntFun, IntSorted
