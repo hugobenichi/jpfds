@@ -9,11 +9,11 @@ public interface Reducible<X> {
     <Y> Y reduce(Y seed, BiFunction<Y, ? super X,Y> f);
 
     default <C extends Col<X,C>> C into(C col) {
-      return this.reduce(col, col.reducer());
+      return this.reduce(col, Col::addTo);
     }
 
     default <B extends Builder<X,B,C>,C extends Col<X,C>> C into(B builder) {
-      return this.reduce(builder, builder.reducer()).make();
+      return this.reduce(builder, Col::addTo).make();
     }
 
     default <Y> Reducible<Y> map(final Function<? super X,Y> f) {
