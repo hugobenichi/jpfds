@@ -16,9 +16,9 @@ public interface Col<X,C extends Col<X,C>> extends Iterable<X>, Reducible<X> {
 
   C add(X elem);
   default C addAll(Iterable<X> elems) {
-    Col<X,C> col = this;
+    C col = (C) this;
     for (X elem : elems) { col = col.add(elem); }
-    return (C) col;
+    return col;
   }
 
   default BiFunction<C,X,C> reducer() { return (c,e) -> c.add(e); }

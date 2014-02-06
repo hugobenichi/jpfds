@@ -55,7 +55,7 @@ end
 # TODO: add jar versioning
 desc 'prepare a jar file for the project'
 task :jar => :build do
-  ant.jar :destfile => dir[:build] + '/' + jarname
+  ant.jar :destfile => dir[:build] + '/' + jarname, :basedir => dir[:classes]
 end
 
 desc 'generate javadoc'
