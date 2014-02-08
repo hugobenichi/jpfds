@@ -1,10 +1,10 @@
 package jpfds;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.function.BiFunction;
 
-import jpfds.seqs.EmptySeq;
 import jpfds.seqs.List;
 import jpfds.seqs.SeqBuilder;
 
@@ -25,7 +25,7 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
   default Seq<X> seq() { return this; }
   default Seq<X> cons(X elem) { return Seq.cons(elem, this); }
   default Seq<X> add(X elem) { return this.cons(elem); }
-  default Seq<X> empty() { return EmptySeq.get(); }
+  default Seq<X> empty() { return List.nil(); }
   default Seq<X> union(Seq<X> that) {
     SeqBuilder<X> bld = SeqBuilder.get();
     return bld.addAllThen(this).addAllThen(that).make();
