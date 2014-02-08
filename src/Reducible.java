@@ -89,28 +89,84 @@ public interface Reducible<X> {
   }
 
   /** Keep the first n elements of this Reducible.
+   *  should override the default implementation.
    *  @param n the number of initial elements to keep.
    *  @return a Reducible that stops after producing the n first initial
    *  elements from this Reducible. */
-  default Reducible<X> take(int n) { throw notYetImplemented; }
+  default Reducible<X> take(final int n) {
+    final Reducible<X> source = this;
+    return new Reducible<X>() {
+      public <Y> Y reduce(Y seed, BiFunction<Y, ? super X,Y> g) {
+        Predicate<X> counter = new Predicate<X>() {
+          int left = n;
+          public boolean test(X elem) { return left-- > 0; }
+        };
+        return source.filter(counter).reduce(seed, g);
+      }
+    };
+  }
 
-  /** Skips the n first elements of this Reducible.
+  /** Skips the n first elements of this Reducible. Concrete implementation
+   *  should override the default implementation.
    *  @param n the number of initial elements to skip.
    *  @return a Reducible that skips the n first initial elements of this
    *  Reducible. */
-  default Reducible<X> skip(int n) { throw notYetImplemented; }
+  default Reducible<X> skip(int n) {
+    final Reducible<X> source = this;
+    return new Reducible<X>() {
+      public <Y> Y reduce(Y seed, BiFunction<Y, ? super X,Y> g) {
+        Predicate<X> counter = new Predicate<X>() {
+          int left = n;
+          public boolean test(X elem) { return left-- <= 0; }
+        };
+        return source.filter(counter).reduce(seed, g);
+      }
+    };
+  }
 
   /** Keep elements from this Reducible until the predicate holds true.
    *  @param f a boolean predicate. Cannot be null.
    *  @return a Reducible that stops at the first failure of the predicate. */
-  default Reducible<X> until(Predicate<X> f) { throw notYetImplemented; }
+  default Reducible<X> until(final Predicate<X> f) {
+    final Reducible<X> source = this;
+    return new Reducible<X>() {
+      public <Y> Y reduce(Y seed, BiFunction<Y, ? super X,Y> g) {
+        Predicate<X> transition = new Predicate<X>() {
+          boolean until = true;
+          public boolean test(X elem) { return until = until & f.test(elem); }
+        };
+        return source.filter(transition).reduce(seed, g);
+      }
+    };
+  }
 
   /** Skip elements from this Reducible until the predicate holds false.
    *  @param f a boolean predicate. Cannot be null.
    *  @return a Reducible that skips elements until the first success of the
    *  predicate.*/
-  default Reducible<X> from(Predicate<X> f) { throw notYetImplemented; }
-
-  final UnsupportedOperationException notYetImplemented =
-    new UnsupportedOperationException();
+  default Reducible<X> from(final Predicate<X> f) {
+    final Reducible<X> source = this;
+    return new Reducible<X>() {
+      public <Y> Y reduce(Y seed, BiFunction<Y, ? super X,Y> g) {
+        Predicate<X> transition = new Predicate<X>() {
+          boolean until = false;
+          public boolean test(X elem) { return until = until | f.test(elem); }
+        };
+        return source.filter(transition).reduce(seed, g);
+      }
+    };
+  }
 }
+
+/* NOTES:
+
+The implementation of take/skip/drop cannot take advantage of any knowledge of
+the initial collection. As soon as a map operation is performed, the new
+Reducible has forgotten about its concrete type. The consequence is that the
+default implementation of these take/skip like functions cannot work without
+allocating a counting statefull filter that is blind to the original collection.
+
+How to solve this ? The root of the problem is that the range of reduce() cannot
+be controlled by the final build operation. How to provide an interface to
+control this wihtout making it too heavyweight ?
+*/
