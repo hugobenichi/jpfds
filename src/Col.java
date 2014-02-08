@@ -4,8 +4,8 @@ import java.util.Iterator;
 import java.util.function.BiFunction;
 
 /** A collection abstraction common to all concrete collection types. The Col
- *  interface aims to represent abstract collection types which have a monoid
- *  or group structure.
+ *  interface represents abstract collection types with an underlying monoid
+ *  or group algebraic structure.
  *  @param <X> the type of the elements this collection can hold.
  *  @param <C> the concrete type of the collection. */
 public interface Col<X,C extends Col<X,C>> extends Iterable<X>, Reducible<X> {
@@ -27,9 +27,9 @@ public interface Col<X,C extends Col<X,C>> extends Iterable<X>, Reducible<X> {
   default Iterator<X> iterator() { return this.seq().iterator(); }
 
   /** The empty collection of the same concrete type. This empty collection
-   *  represents the neutral element of the underlying monoid structure of that
-   *  concrete collection type C. Therefore for any collection instance 'c', the
-   *  following relation must hold : c = c.union(c.empty()) = c.empty().union(c) 
+   *  represents the neutral element of the underlying monoid structure of the
+   *  concrete collection type C. Therefore for any collection instance c, the
+   *  following relation must hold: c = c.union(c.empty()) = c.empty().union(c).
    *  @return an empty collection of the same type. */
   C empty();
 
@@ -43,7 +43,10 @@ public interface Col<X,C extends Col<X,C>> extends Iterable<X>, Reducible<X> {
 
   /** Add an element to this collection. Depending on the concrete collection
    *  type, this operation may be a no op (example: Set). The add operation
-   *  must be equivalent to merging a collection instance with an 
+   *  must be equivalent to merging a collection instance with a singleton
+   *  instance containing the input argument. In other word, for any collection
+   *  instance c and any element x, the following relation must hold:
+   *  c.add(x) = c.union(c.empty().add(x)).
    *  @param elem a element reference. Can be null.
    *  @return a new collection that contains all the elements of this collection
    *  and the additional element. */
@@ -74,7 +77,7 @@ public interface Col<X,C extends Col<X,C>> extends Iterable<X>, Reducible<X> {
     return seed;
   }
 
-  /** Add an element to a collection. This function is convenient for giving as
+  /** Add an element to a collection. Convenience function for giving as
    *  an argument to higher order functions such as Reducible#reduce().
    *  @param col a collection. Cannot be null.
    *  @param elem an element. Can be null.
