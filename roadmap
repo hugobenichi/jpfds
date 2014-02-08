@@ -1,15 +1,42 @@
 0.1 target
 
+  merge vagrant env
+  doc seq
+  doc seqbuilder
   test and debug Seq code
-  clean Seq code and add doc to interface methods
-  add toString, equals, hashCode ? (start with eq method)
+  add examples for reducer and seqs
+  add strongly eq and toString method
   clean Readme (add build instruction)
   add release note
-  merge vagrant env
+  add SizeInfo interface
 
 0.2 target
 
-  add extras to Reducible
   add infinite seq constructors (continually, cycle, from supplier, ...)
   add IntSeq + associated Col/Reducer
   add IntSet + associate abstraction
+  ?
+
+backlog
+
+  consider equals, hashCode ?
+  consider linked arraylets for Seq
+  try array wrapping vector + covariant builder (StoreException ?)
+  make rake use the jruby nailgun server correctly
+  add ant task to run a particular class (examples)
+  add help task, guide task, start nailgun inside vm
+  add contract, invariant, generator based tests
+  consider long variant: LongCol, LongVec, LongSeq, LongReD
+  consider double variant: DoubleCol, DoubleVec, DoubleSeq, DoubleRed
+  workout Fun and IntFun interface
+  workout Indexe / Ordered interfaces
+  add list of target data structure implementation:
+    Heap, BinHeap, RBTreeSet, RBTreeMap, HashSetTrie, HashMapTrie, Splay, Queue
+  move package organization description by implementation + type sto readme
+    jpfs.{Vec, Seq, Set, Fun, SizeInfo, Col, Reducer, Builder}
+    jpfds.seqs.{SeqBuilder, EmptySeq, List, ... } x 4 types
+    jpfds.vecs.{Vector, ...} x 4 types
+    jpfds.hashtries.{HashTrieSet, HashTrieMap, Vector, ... } x 2 types
+    jpfds.trees.{TreeSet, TreeMap, IntTreeSet, ... } x 2 types
+    jpfds.queues
+    jpfds.heaps
