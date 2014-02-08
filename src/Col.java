@@ -56,7 +56,7 @@ public interface Col<X,C extends Col<X,C>> extends Iterable<X>, Reducible<X> {
    *  the concrete collection type, this operation may be a no op for some of
    *  the given elements (example: Set).
    *  @param elems an Iterable collection of elements. Cannot be null. Can
-   *  contains null.
+   *  contain null references.
    *  @return a new collection that contains all the elements of both this
    *  collection and of the given Iterable collection. */
   default C addAll(Iterable<X> elems) {
@@ -81,7 +81,7 @@ public interface Col<X,C extends Col<X,C>> extends Iterable<X>, Reducible<X> {
    *  an argument to higher order functions such as Reducible#reduce().
    *  @param col a collection. Cannot be null.
    *  @param elem an element. Can be null.
-   *  @param <X> type of the elements in the collection.
+   *  @param <X> type of the elements of the collection.
    *  @param <C> concrete type of the collection.
    *  @return the result of adding the given element to the given collection. */
   static <X,C extends Col<X,C>> C addTo(C col, X elem) { return col.add(elem); }
