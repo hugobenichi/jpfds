@@ -2,7 +2,7 @@ package jpfds.seqs;
 
 import jpfds.Seq;
 
-public class List<X> implements Seq<X> {
+public final class List<X> implements Seq<X> {
 
   private final X head;
   private Seq<X> tail;
@@ -13,74 +13,97 @@ public class List<X> implements Seq<X> {
   }
 
   private List(X head) {
-    this(head, EmptySeq.get());
+    this(head, nil());
   }
 
   public boolean isEmpty() { return false; }
   public Seq<X> tail() { return tail; }
   public X head() { return head; }
 
-  public static <X> Seq<X> cons(X elem, Seq<? extends X> tail) {
+  public static <Y> Seq<Y> cons(Y elem, Seq<? extends Y> tail) {
     return new List(elem, tail);
   }
 
-  public static <X> SeqBuilder<X> builder() { return EmptySeqBuilder.get(); }
+  public static <Y> SeqBuilder<Y> builder() { return new ListBuilder(); }
 
-  private static class EmptySeqBuilder<X> extends SeqBuilder<X> {
-    private EmptySeqBuilder() {}
-    private static final EmptySeqBuilder<Object> theEmptySeqBuilder =
-      new EmptySeqBuilder<>();
-    public static <X> EmptySeqBuilder<X> get() {
-      return (EmptySeqBuilder<X>) theEmptySeqBuilder;
-    }
+  public static <Y> Seq<Y> nil() { return (Seq<Y>) Nil.nil; }
+
+  private static class Nil implements Seq<Object> {
+    private Nil() {}
+
+    public static final Nil nil = new Nil();
+
     public boolean isEmpty() { return true; }
-    public SeqBuilder<X> cons(X elem) { return new ListBuilder(elem); }
-    public SeqBuilder<X> add(X elem) { return cons(elem); }
-    public SeqBuilder<X> union(SeqBuilder<X> that) { return that; }
-    public Seq<X> make() { return EmptySeq.get(); }
-    public Seq<X> concat(Seq<X> tail) { return tail; }
+    public Object head() { throw headException; }
+    public Seq<Object> tail() { throw tailException; }
+
+    private static final RuntimeException headException =
+      new RuntimeException("Empty list has no head");
+
+    private static final RuntimeException tailException =
+      new RuntimeException("Empty list has no tail");
   }
 
-  private static class ListBuilder<X> extends SeqBuilder<X> {
+  private static class ListBuilder<X> implements SeqBuilder<X> {
 
-    private List<X> head;
+    private Seq<X> head;
     private List<X> end;
+    private boolean published = false;
+
+    public ListBuilder() {
+      this.head = List.nil();
+      this.end = null;
+    }
 
     public ListBuilder(X elem) {
-      this.head = new List(elem);
-      this.end = this.head;
+      this.end = new List(elem);
+      this.head = this.end;
     }
 
-    public ListBuilder<X> cons(X elem) {
-      this.head = new List(elem, this.head);
-      return this;
+    public void cons(X elem) {
+      assertUnpublished();
+      if (head.isEmpty()) {
+        this.end = new List(elem);
+        this.head = this.end;
+      } else {
+        this.head = new List(elem, this.head);
+      }
     }
 
-    public ListBuilder<X> add(X elem) {
-      List<X> newTail = new List(elem);
-      this.end.tail = newTail;
-      this.end = newTail;
-      return this;
+    public void add(X elem) {
+      assertUnpublished();
+      List<X> newEnd = new List(elem);
+      if (head.isEmpty()) {
+        this.head = newEnd;
+        this.end = newEnd;
+      } else {
+        this.end.tail = newEnd;
+        this.end = newEnd;
+      }
     }
 
-    // unsafe !! set end next to empty, unless it s empty
-    // unset List to avoid double call to toSeq and avoid mutating List
-    public Seq<X> make() { return this.head; }
+    public Seq<X> make() {
+      assertUnpublished();
+      published = true;
+      return this.head;
+    }
 
     public Seq<X> concat(Seq<X> tail) {
-      this.end.tail = tail;
-      return make();
+      assertUnpublished();
+      if (head.isEmpty()) {
+        return tail;
+      } else {
+        this.end.tail = tail;
+        return make();
+      }
     }
 
-    public boolean isEmpty() { return false; }
-    public SeqBuilder<X> union(SeqBuilder<X> builder) {
-      if (builder instanceof EmptySeqBuilder)
-        return this;
-      ListBuilder<X> that = (ListBuilder<X>) builder;
-      this.end.tail = that.head;
-      this.end = that.end;
-      return this;
-    }
+    public boolean isConsumed() { return published; }
+
+    private void assertUnpublished() { if (published) throw consumedException; }
+
+    private static final IllegalStateException consumedException =
+      new IllegalStateException("Cannot use Builder after Buildee publication");
   }
 
 }

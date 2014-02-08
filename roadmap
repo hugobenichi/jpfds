@@ -3,7 +3,6 @@
   test and debug Seq code
   clean Seq code and add doc to interface methods
   add toString, equals, hashCode ? (start with eq method)
-  add other utility method like reverse (should be static maybe) ?
   clean Readme (add build instruction)
   add release note
   merge vagrant env

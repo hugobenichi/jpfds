@@ -23,12 +23,12 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
   }
 
   default Seq<X> seq() { return this; }
-  default Seq<X> cons(X elem) { return List.cons(elem, this); }
+  default Seq<X> cons(X elem) { return Seq.cons(elem, this); }
   default Seq<X> add(X elem) { return this.cons(elem); }
   default Seq<X> empty() { return EmptySeq.get(); }
   default Seq<X> union(Seq<X> that) {
-    SeqBuilder<X> bld = List.builder();
-    return bld.addAll(this).addAll(that).make(); // can't inline, bad inference
+    SeqBuilder<X> bld = SeqBuilder.get();
+    return bld.addAllThen(this).addAllThen(that).make();
   }
 
   default Seq<X> reverse() { return this.reduce(empty(), Seq::cons); }
@@ -65,17 +65,17 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
   }
 
   static <Y> Seq<Y> of(Iterable<Y> elems) {
-    SeqBuilder<Y> bld = List.builder();
-    return bld.addAll(elems).make(); // can't inline -> bad inference ?
+    SeqBuilder<Y> bld = SeqBuilder.get();
+    return bld.addAllThen(elems).make();
   }
 
   static <Y> Seq<Y> of(Y... args) {
-    SeqBuilder<Y> bld = List.builder();
-    for (Y elem : args) { bld = bld.add(elem); }
+    SeqBuilder<Y> bld = SeqBuilder.get();
+    for (Y elem : args) { bld.add(elem); }
     return bld.make();
   }
 
-  static <Y> Seq<Y> nil() { return EmptySeq.get(); }
+  static <Y> Seq<Y> nil() { return List.nil(); }
 
   final RuntimeException removeException =
     new UnsupportedOperationException(

@@ -4,6 +4,10 @@ import java.util.function.Function;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
+/** Abstraction of a collection that knows how to traverse itself. Such a
+ *  "Reducible" collection can then serve as a source of values to create new
+ *  collections or modifying existing collection. The Reducible collection can
+ *   be modified with bulk operations */
 public interface Reducible<X> {
 
     <Y> Y reduce(Y seed, BiFunction<Y, ? super X,Y> f);
@@ -12,8 +16,8 @@ public interface Reducible<X> {
       return this.reduce(col, Col::addTo);
     }
 
-    default <B extends Builder<X,B,C>,C extends Col<X,C>> C into(B builder) {
-      return this.reduce(builder, Col::addTo).make();
+    default <C extends Col<X,C>> C into(Builder<X,C> builder) {
+      return this.reduce(builder, Builder::addTo).make();
     }
 
     default <Y> Reducible<Y> map(final Function<? super X,Y> f) {
