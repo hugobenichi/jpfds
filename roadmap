@@ -1,6 +1,5 @@
 0.1 target
 
-  merge vagrant env
   doc seq
   doc seqbuilder
   test and debug Seq code

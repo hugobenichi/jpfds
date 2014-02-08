@@ -1,0 +1,15 @@
+--------------------------------------------------------------------------------
+
+    A vagrant setup that prepare a java8 environment inside an Ubuntu VM.
+
+--------------------------------------------------------------------------------
+
+ Quick start:
+                $ vagrant up              # create and boot the vm
+                $ vagrant ssh             # log into the vm
+                $ vagrant ssh -- -A       # log into the vm with ssh forwarding
+                $ vagrant suspend         # stop the vm
+
+  More info on www.vagrantup.com and with $ vagrant --help
+
+--------------------------------------------------------------------------------
