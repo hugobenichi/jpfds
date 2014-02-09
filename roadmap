@@ -1,16 +1,16 @@
 0.1 target
 
-  doc seq
-  doc seqbuilder
+  doc build script and polish a bit
+  clean Readme (add build instruction)
+  doc seq, seqbuilder, list
   test and debug Seq code
   add examples for reducer and seqs
   add strongly eq and toString method
-  clean Readme (add build instruction)
   add release note
-  add SizeInfo interface
 
 0.2 target
 
+  add SizeInfo interface
   add infinite seq constructors (continually, cycle, from supplier, ...)
   add IntSeq + associated Col/Reducer
   add IntSet + associate abstraction

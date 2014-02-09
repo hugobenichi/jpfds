@@ -2,7 +2,6 @@
 
 set -x
 
-
 # config variables
 java8_dl="http://download.java.net/jdk8/archive/b120/binaries/"\
 "jdk-8-ea-bin-b120-linux-x64-12_dec_2013.tar.gz?q=download"
@@ -39,6 +38,5 @@ $jruby_path/jruby -version >/dev/null 2>&1 || {
   export PATH=$PATH:$jdk8_path:$jruby_path
   echo "export PATH=$PATH:$jruby_path" >> /home/vagrant/.bashrc
   cd /home/vagrant/jruby-1.7.9/tool/nailgun/ && ./configure && make
-  #(jruby --ng-server &)
   jruby -S jgem install rake rspec shoulda bundler jbundler
 }
