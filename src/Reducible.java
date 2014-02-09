@@ -169,4 +169,6 @@ allocating a counting statefull filter that is blind to the original collection.
 How to solve this ? The root of the problem is that the range of reduce() cannot
 be controlled by the final build operation. How to provide an interface to
 control this wihtout making it too heavyweight ?
+
+-> need a partial reduce operation
 */
