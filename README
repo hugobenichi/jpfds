@@ -1,5 +1,55 @@
 --------------------------------------------------------------------------------
 
+            jpfds: Java Persistent & Functional Data Structures
+
+              Copyright (c) Hugo Benichi. All right reserved.
+
+--------------------------------------------------------------------------------
+
+                                Overview
+
+Jpfds is a library of persistent and immutable data structures for the Java
+programming language. It takes advantages of the lastest features of Java 8 to
+give a functional feel to its API.
+
+For purpose of correcteness, clean abstraction, and usability, a strong emphasis
+is put on the sepation of the collection APIs and interfaces from the concrete
+data structure implementation.
+
+--------------------------------------------------------------------------------
+
+                    Build and development environment
+
+A Java 8 jdk is required to compile the project. In addition, the build script
+is written in Ruby and needs a JRuby runtime with some external Ruby gems to be
+executed.
+
+A Vagrant script is provided for easily creating a vm environment with all
+necessary dependencies. See vagrant/README for details and vagrant/init.sh for
+a list of dependencies.
+
+If you have VirtualBox and Vagrant installed on your system, to start the vm do:
+
+$ cd vagrant && vagrant up && vagrant ssh
+
+Once inside the running vm, go to /home/vagrant/jpfds and start the build
+console with
+
+$ Build
+
+which will boot a Ruby repl (irb) with the JRuby runtime. Inside the repl, you
+can compile with
+
+> exec :comp
+
+To run a complete build cycle with javadoc and jar output, do
+
+> run :build
+
+--------------------------------------------------------------------------------
+
+                              Background
+
 This project contains Java implementations of some of the immutable and
 persistent data structures described in the book "Purely Functional Data
 Structures" by Chris Okasaki.
@@ -10,14 +60,14 @@ its collection abstractions.
 
 It is essentially a personal exercise in comprehension and assimilation.
 
-The implementations will be based on Java 8 and make use of the new lambdas
+The implementations is based on Java 8 and make use of the new lambdas
 and functional interface features, as well as the possibility for default
 implementation in interfaces.
 
-This project briefly started as a Scala project until I decided to instead
-use plain Java after asking myself about the long term value of writing jvm
-based libraries in Scala, and realizing that the new features of java 8 now
-offers much of what is needed for developing and using functional oriented
-api and libraries in a practical way for both producers and consumers.
+This project briefly started as a Scala project until I decided to instead use
+plain Java after asking myself about the long term value of writing jvm based
+libraries in Scala, and realizing that the new features of Java 8 would offer
+me enough language features for developing and using functional oriented APIs
+and libraries in a practical way.
 
 --------------------------------------------------------------------------------

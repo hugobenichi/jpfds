@@ -1,47 +1,42 @@
 0.1 target
-
-  add copyright info
-  doc build script and polish a bit
-  clean Readme (add build instruction)
-  doc seq, seqbuilder, list
+  polish built script (run/exec, non console builds, add help)
+  add java run ant tasks for executing examples
+  fully doc seq, seqbuilder,
+  class-lvl doc for list, LazySeq
   test and debug Seq code
   add examples for reducer and seqs
-  add strongly eq and toString method
-  add release note
+  add release note in README
   add SizeInfo interface
   add infinite seq constructors (continually, cycle, from supplier, ...)
   add StringReader and Tokenizer
   add IntSeq + associated Col/Reducer
 
 0.2 target
-
   add Set abstraction, Sorted abstraction
   add RedBlackSet
-  add Range(Indexed?)
+  add Range, Indexed interface
   add SortedIntSet
-  add Heap, Splay
-  ?
+  add Heap, Splay, BinaryHeap
 
 0.3 target
+  Add Fun, IntFun interface
+  RedBlackTreeMap
+  RedBlackIntTreeMap
 
+0.4 target
   Vector
+  HashTrieSet
+  HashTrieMap
 
 backlog
-
   consider equals, hashCode ?
   consider linked arraylets for Seq
   try array wrapping vector + covariant builder (StoreException ?)
-  make rake use the jruby nailgun server correctly
-  add ant task to run a particular class (examples)
-  add help task, guide task, start nailgun inside vm
   add contract, invariant, generator based tests
   consider long variant: LongCol, LongVec, LongSeq, LongReD
   consider double variant: DoubleCol, DoubleVec, DoubleSeq, DoubleRed
-  workout Fun and IntFun interface
-  workout Indexe / Ordered interfaces
-  add list of target data structure implementation:
-    Heap, BinHeap, RBTreeSet, RBTreeMap, HashSetTrie, HashMapTrie, Splay, Queue
-  move package organization description by implementation + type sto readme
+  Queue data structure
+  move package organization description by implementation + type into readme
     jpfs.{Vec, Seq, Set, Fun, SizeInfo, Col, Reducer, Builder}
     jpfds.seqs.{SeqBuilder, EmptySeq, List, ... } x 4 types
     jpfds.vecs.{Vector, ...} x 4 types
