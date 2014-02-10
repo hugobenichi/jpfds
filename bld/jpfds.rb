@@ -67,11 +67,13 @@ end
 module RakeForwarder
   {:run => :invoke, :exec => :execute}.each do |name, action|
     define_method name do |target|
+      start = Time.now
       begin
         Rake::Task[target].send action
       rescue Exception => ex
         puts "err: %s" % ex
       end
+      "#{Time.now - start} sec"
     end
   end
 end
