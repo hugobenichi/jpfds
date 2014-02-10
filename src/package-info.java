@@ -1,3 +1,7 @@
+/*----------------------------------------------------------------------------*
+ *              Copyright (c) Hugo Benichi. All right reserved.               *
+ *----------------------------------------------------------------------------*/
+
 /**
  * The jpfds package is a collection of immutable and functional data structure
  * abstractions and implementations for the Java language. These data structures

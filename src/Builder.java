@@ -1,3 +1,7 @@
+/*----------------------------------------------------------------------------*
+ *              Copyright (c) Hugo Benichi. All right reserved.               *
+ *----------------------------------------------------------------------------*/
+
 package jpfds;
 
 /** A mutable object which knows how to assemble and produce an instance of a
