@@ -38,5 +38,5 @@ $jruby_path/jruby -version >/dev/null 2>&1 || {
   export PATH=$PATH:$jdk8_path:$jruby_path
   echo "export PATH=$PATH:$jruby_path" >> /home/vagrant/.bashrc
   cd /home/vagrant/jruby-1.7.9/tool/nailgun/ && ./configure && make
-  jruby -S jgem install rake rspec shoulda bundler jbundler
+  jruby -S jgem install rake rspec shoulda bundler jbundler eventmachine-tail
 }
