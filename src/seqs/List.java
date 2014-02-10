@@ -8,8 +8,9 @@ public final class List<X> implements Seq<X> {
   private Seq<X> tail;
 
   private List(X head, Seq<? extends X> tail) {
+    @SuppressWarnings("unchecked") Seq<X> castedTail = (Seq<X>) tail;
     this.head = head;
-    this.tail = (Seq<X>) tail;
+    this.tail = castedTail;
   }
 
   private List(X head) {
@@ -21,12 +22,15 @@ public final class List<X> implements Seq<X> {
   public X head() { return head; }
 
   public static <Y> Seq<Y> cons(Y elem, Seq<? extends Y> tail) {
-    return new List(elem, tail);
+    return new List<>(elem, tail);
   }
 
-  public static <Y> SeqBuilder<Y> builder() { return new ListBuilder(); }
+  public static <Y> SeqBuilder<Y> builder() { return new ListBuilder<>(); }
 
-  public static <Y> Seq<Y> nil() { return (Seq<Y>) Nil.nil; }
+  public static <Y> Seq<Y> nil() {
+    @SuppressWarnings("unchecked") Seq<Y> castedNil = (Seq<Y>) Nil.nil;
+    return castedNil;
+  }
 
   private static class Nil implements Seq<Object> {
     private Nil() {}
@@ -49,23 +53,23 @@ public final class List<X> implements Seq<X> {
     }
 
     public ListBuilder(X elem) {
-      this.end = new List(elem);
+      this.end = new List<>(elem);
       this.head = this.end;
     }
 
     public void cons(X elem) {
       assertUnpublished();
       if (head.isEmpty()) {
-        this.end = new List(elem);
+        this.end = new List<>(elem);
         this.head = this.end;
       } else {
-        this.head = new List(elem, this.head);
+        this.head = new List<>(elem, this.head);
       }
     }
 
     public void add(X elem) {
       assertUnpublished();
-      List<X> newEnd = new List(elem);
+      List<X> newEnd = new List<>(elem);
       if (head.isEmpty()) {
         this.head = newEnd;
         this.end = newEnd;

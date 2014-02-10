@@ -60,7 +60,7 @@ public interface Col<X,C extends Col<X,C>> extends Iterable<X>, Reducible<X> {
    *  @return a new collection that contains all the elements of both this
    *  collection and of the given Iterable collection. */
   default C addAll(Iterable<X> elems) {
-    C col = (C) this;
+    @SuppressWarnings("unchecked") C col = (C) this;
     for (X elem : elems) { col = col.add(elem); }
     return col;
   }

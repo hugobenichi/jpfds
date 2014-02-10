@@ -69,10 +69,21 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
     return bld.addAllThen(elems).make();
   }
 
-  static <Y> Seq<Y> of(Y... args) {
+  static <Y> Seq<Y> of(Y y1) {
+    return SeqBuilder.<Y>get().addThen(y1).make();
+  }
+
+  static <Y> Seq<Y> of(Y y1, Y y2) {
+    return SeqBuilder.<Y>get().addThen(y1).addThen(y2).make();
+  }
+
+  static <Y> Seq<Y> of(Y y1, Y y2, Y y3) {
+    return SeqBuilder.<Y>get().addThen(y1).addThen(y2).addThen(y3).make();
+  }
+
+  static <Y> Seq<Y> of(Y y1, Y y2, Y y3, Y y4) {
     SeqBuilder<Y> bld = SeqBuilder.get();
-    for (Y elem : args) { bld.add(elem); }
-    return bld.make();
+    return bld.addThen(y1).addThen(y2).addThen(y3).addThen(y4).make();
   }
 
   static <Y> Seq<Y> nil() { return List.nil(); }

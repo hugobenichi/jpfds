@@ -16,12 +16,14 @@ public final class LazySeq<X> implements Seq<X> {
 
   public X head() {
     ensureNotEmptyOr(Seq.emptyHeadException);
-    return (X) this.head;
+    @SuppressWarnings("unchecked") X castedHead = (X) this.head;
+    return castedHead;
   }
 
   public Seq<X> tail() {
     ensureNotEmptyOr(Seq.emptyTailException);
-    return (Seq<X>) this.tail;
+    @SuppressWarnings("unchecked") Seq<X> castedTail = (Seq<X>) this.tail;
+    return castedTail;
   }
 
   private void ensureInit() { if (notInit()) tryAdvanceIterator(); }
@@ -34,24 +36,25 @@ public final class LazySeq<X> implements Seq<X> {
   private boolean notInit() { return this.head == NotInit; }
 
   private synchronized void tryAdvanceIterator() {
-    if (notInit()) advanceIterator((Iterator<X>)this.tail);
+    if (notInit()) advanceIterator();
   }
 
-  private void advanceIterator(Iterator<X> iter) {
+  private void advanceIterator() {
+    @SuppressWarnings("unchecked") Iterator<X> iter = (Iterator<X>) this.tail;
     if (iter.hasNext()) {
       this.head = iter.next();
-      this.tail = new LazySeq(iter);
+      this.tail = new LazySeq<X>(iter);
     } else {
       this.head = Empty;
       this.tail = Empty;
     }
   }
 
-  public static <X> Seq<X> from(Iterable<X> source) {
-    return new LazySeq(source.iterator());
+  public static <Y> Seq<Y> from(Iterable<Y> source) {
+    return new LazySeq<Y>(source.iterator());
   }
 
-  public static <X> Seq<X> from(Iterator<X> source) {
-    return new LazySeq(source);
+  public static <Y> Seq<Y> from(Iterator<Y> source) {
+    return new LazySeq<Y>(source);
   }
 }

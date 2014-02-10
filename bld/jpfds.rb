@@ -30,7 +30,7 @@ task :build => [:comp, :jar, :doc]
 desc 'compile java sources'
 task :comp do
   ant.mkdir :dir => dir[:classes]
-  ant_do :javac, compile_options
+  ant.javac(compile_options) { compilerarg :value => "-Xlint:all" }
 end
 
 desc 'run all tests'
@@ -56,9 +56,9 @@ task :clean do
   ant.delete :dir => dir[:build]
 end
 
-def ant_do method, *args
+def ant_do method, *args, &block
   begin
-    ant.send method, *args
+    ant.send method, *args, &block
   rescue
     raise "failed to invoke ant target :%s" % method
   end
@@ -106,6 +106,7 @@ main :project => project
         keep history of command
         have a watcher mode for recompile and run test
           (associate src to test for smart rerunning test)
+        allow to reload the build script and gracefully reload tasks
 
     Bldit
       at startup: list number of tasks, top lvl task, project name, other info

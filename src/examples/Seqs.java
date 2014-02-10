@@ -21,7 +21,7 @@ public final class Seqs {
     int total = xs.map((s) -> s.length()).reduce(0, (t, s) -> t+s);
     cout.println(total);
 
-    Seq<Integer> is = Seq.of(1,2,3); // builder is broken
+    Seq<Integer> is = Seq.of(1,2,3);
     //Seq<Integer> is = Seq.nil();
     is = is.cons(10).cons(20).cons(30);
 
