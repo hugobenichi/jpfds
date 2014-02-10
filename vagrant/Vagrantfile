@@ -20,7 +20,7 @@ Vagrant.configure(API_VERSION) do |config|
   # host folder sharing
   config.vm.synced_folder "../",  "/home/vagrant/jpfds"
 
-  config.vm.provision :shell do |s| s.path = 'vagrant_init.sh' end
+  config.vm.provision :shell do |s| s.path = 'init.sh' end
 
   config.ssh.forward_agent = true
 

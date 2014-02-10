@@ -40,3 +40,5 @@ $jruby_path/jruby -version >/dev/null 2>&1 || {
   cd /home/vagrant/jruby-1.7.9/tool/nailgun/ && ./configure && make
   jruby -S jgem install rake rspec shoulda bundler jbundler eventmachine-tail
 }
+
+echo "export PATH=$PATH:/home/vagrant/jpfds" >> /home/vagrant/.bashrc
