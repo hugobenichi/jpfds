@@ -1,5 +1,6 @@
 0.1 target
 
+  add copyright info
   doc build script and polish a bit
   clean Readme (add build instruction)
   doc seq, seqbuilder, list
@@ -7,14 +8,23 @@
   add examples for reducer and seqs
   add strongly eq and toString method
   add release note
+  add SizeInfo interface
+  add infinite seq constructors (continually, cycle, from supplier, ...)
+  add StringReader and Tokenizer
+  add IntSeq + associated Col/Reducer
 
 0.2 target
 
-  add SizeInfo interface
-  add infinite seq constructors (continually, cycle, from supplier, ...)
-  add IntSeq + associated Col/Reducer
-  add IntSet + associate abstraction
+  add Set abstraction, Sorted abstraction
+  add RedBlackSet
+  add Range(Indexed?)
+  add SortedIntSet
+  add Heap, Splay
   ?
+
+0.3 target
+
+  Vector
 
 backlog
 

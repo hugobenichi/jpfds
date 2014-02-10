@@ -30,18 +30,11 @@ public final class List<X> implements Seq<X> {
 
   private static class Nil implements Seq<Object> {
     private Nil() {}
-
     public static final Nil nil = new Nil();
 
     public boolean isEmpty() { return true; }
-    public Object head() { throw headException; }
-    public Seq<Object> tail() { throw tailException; }
-
-    private static final RuntimeException headException =
-      new RuntimeException("Empty list has no head");
-
-    private static final RuntimeException tailException =
-      new RuntimeException("Empty list has no tail");
+    public Object head() { throw Seq.emptyHeadException; }
+    public Seq<Object> tail() { throw Seq.emptyTailException; }
   }
 
   private static class ListBuilder<X> implements SeqBuilder<X> {

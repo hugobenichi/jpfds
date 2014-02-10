@@ -77,8 +77,13 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
 
   static <Y> Seq<Y> nil() { return List.nil(); }
 
-  final RuntimeException removeException =
-    new UnsupportedOperationException(
-      "Iterators over immutable Seq objects do not support #remove().");
+  RuntimeException removeException =
+    new UnsupportedOperationException("Seq Iterators do not support remove().");
+
+  RuntimeException emptyHeadException =
+    new UnsupportedOperationException("An empty seq has no head.");
+
+  RuntimeException emptyTailException =
+    new UnsupportedOperationException("An empty seq has no tail.");
 
 }
