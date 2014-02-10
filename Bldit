@@ -1,3 +1,0 @@
-#!/bin/bash
-
-jruby -S jirb -r Build.rb

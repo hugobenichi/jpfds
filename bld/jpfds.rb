@@ -4,12 +4,7 @@ require 'pathname'
 
 Rake.application.options.trace = false
 
-project_dir = Pathname.new(__FILE__).dirname
-class_dir = project_dir.to_path + '/build'
-
-# TODO: find a way to hook efficiently to nailgun jruby process
-Dir.chdir project_dir     # unless ng server runs in same dir
-$CLASSPATH << class_dir   # add compile classes directory to java classpath
+$CLASSPATH << Dir.pwd + '/out' # add compile classes to classpath
 
 def ant_do method, *args
   begin
@@ -23,9 +18,9 @@ end
 dir = {
   :src        => 'src',
   :srcfiles   => FileList['src/**/*.java'],
-  :build      => 'build',
-  :classes    => 'build/classes',
-  :doc        => 'build/doc'
+  :build      => 'out',
+  :classes    => 'out/classes',
+  :doc        => 'out/doc'
 }
 
 # TODO: pass this as argument to build task
@@ -37,10 +32,13 @@ compile_options = {
 }
 
 # TODO: pass this as environment conf
-jarname = 'FooBarBaz.jar'
+jarname = 'Jpfds.jar'
+
+desc 'complete build task'
+task :build => [:comp, :jar, :doc]
 
 desc 'compile java sources'
-task :build do
+task :comp do
   ant.mkdir :dir => dir[:classes]
   ant_do :javac, compile_options
 end
@@ -48,14 +46,13 @@ end
 desc 'run all tests'
 task :test => :build do
   # TODO: find a better way to run and rerun test instead of requiring
-  require 'test/foo_test-unit'
+#  require 'test/foo_test-unit'
 #  require 'test/foo_test-spec'
 #  require 'test/foo_test-shoulda'
 end
 
-# TODO: add jar versioning
 desc 'prepare a jar file for the project'
-task :jar => :build do
+task :jar => :comp do
   ant.jar :destfile => dir[:build] + '/' + jarname, :basedir => dir[:classes]
 end
 
@@ -69,13 +66,19 @@ task :clean do
   ant.delete :dir => dir[:build]
 end
 
-def bld name
-  begin
-    Rake::Task[name].execute if Rake::Task.task_defined? name
-  rescue Exception => ex
-    puts "err: %s" % ex
+module RakeForwarder
+  {:run => :invoke, :exec => :execute}.each do |name, action|
+    define_method name do |target|
+      begin
+        Rake::Task[target].send action
+      rescue Exception => ex
+        puts "err: %s" % ex
+      end
+    end
   end
 end
+
+include RakeForwarder
 
 <<eos
   notes:
