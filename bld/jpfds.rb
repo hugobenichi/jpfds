@@ -2,17 +2,10 @@ require 'rake'
 require 'ant'
 require 'pathname'
 
-Rake.application.options.trace = false
+project = "Jpfds"
+jarname = project + ".jar"
 
 $CLASSPATH << Dir.pwd + '/out' # add compile classes to classpath
-
-def ant_do method, *args
-  begin
-    ant.send method, *args
-  rescue
-    raise "failed to invoke ant target :%s" % method
-  end
-end
 
 # TODO: pass this as environment
 dir = {
@@ -30,9 +23,6 @@ compile_options = {
   :source   => '1.8',
   :target   => '1.8'
 }
-
-# TODO: pass this as environment conf
-jarname = 'Jpfds.jar'
 
 desc 'complete build task'
 task :build => [:comp, :jar, :doc]
@@ -66,6 +56,14 @@ task :clean do
   ant.delete :dir => dir[:build]
 end
 
+def ant_do method, *args
+  begin
+    ant.send method, *args
+  rescue
+    raise "failed to invoke ant target :%s" % method
+  end
+end
+
 module RakeForwarder
   {:run => :invoke, :exec => :execute}.each do |name, action|
     define_method name do |target|
@@ -79,6 +77,21 @@ module RakeForwarder
 end
 
 include RakeForwarder
+
+Rake.application.options.trace = false
+
+def format_task task
+  pre = task.prerequisites
+  task.name + (pre.empty? ? "" : " => %s" % pre.join(", "))
+end
+
+def main env
+  puts "%s continuous build console" % env[:project]
+  puts "list of targets:"
+  Rake::Task.tasks.map{ |t| format_task t }.each{ |desc| puts "  %s" % desc}
+end
+
+main :project => project
 
 <<eos
   notes:
