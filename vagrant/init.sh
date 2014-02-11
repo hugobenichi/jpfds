@@ -15,6 +15,8 @@ java_home="/home/vagrant/jdk1.8.0/"
 ant_path="/home/vagrant/apache-ant-1.9.3/bin"
 jruby_path="/home/vagrant/jruby-1.7.9/bin"
 
+gems="rake rspec test-spec shoulda bundler jbundler eventmachine-tail"
+
 
 # package installation
 sudo apt-get update
@@ -38,7 +40,7 @@ $jruby_path/jruby -version >/dev/null 2>&1 || {
   export PATH=$PATH:$jdk8_path:$jruby_path
   echo "export PATH=$PATH:$jruby_path" >> /home/vagrant/.bashrc
   cd /home/vagrant/jruby-1.7.9/tool/nailgun/ && ./configure && make
-  jruby -S jgem install rake rspec shoulda bundler jbundler eventmachine-tail
+  jruby -S jgem install $gems
 }
 
 echo "export PATH=$PATH:/home/vagrant/jpfds" >> /home/vagrant/.bashrc

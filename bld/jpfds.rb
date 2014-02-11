@@ -1,6 +1,7 @@
 require 'rake'
 require 'ant'
 require 'pathname'
+require 'rspec'
 
 project = "Jpfds"
 jarname = project + ".jar"
@@ -24,6 +25,8 @@ compile_options = {
   :target   => '1.8'
 }
 
+# TODO: put tasks in a separate rb file and make them reloadable
+
 desc 'complete build task'
 task :build => [:comp, :jar, :doc]
 
@@ -34,16 +37,17 @@ task :comp do
 end
 
 desc 'run all tests'
-task :test => :build do
-  # TODO: find a better way to run and rerun test instead of requiring
-#  require 'test/foo_test-unit'
-#  require 'test/foo_test-spec'
-#  require 'test/foo_test-shoulda'
+task :test => :jar do
+  config = RSpec.configuration
+  config.color = true
+  RSpec::Core::Runner.run FileList['test/spec/*_spec.rb']
 end
 
 desc 'prepare a jar file for the project'
 task :jar => :comp do
   ant.jar :destfile => dir[:build] + '/' + jarname, :basedir => dir[:classes]
+  #TODO: make this jar reloadable
+  require Dir.pwd + '/out/' + jarname
 end
 
 desc 'generate javadoc'
