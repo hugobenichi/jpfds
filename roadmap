@@ -1,12 +1,13 @@
 0.1 target
+  add SizeInfo interface
+  test Seq reduce, map, filter, flatMap
+  test LazySeq
   polish built script (run/exec, non console builds, add help)
-  add java run ant tasks for executing examples
   fully doc seq, seqbuilder,
   class-lvl doc for list, LazySeq
-  test and debug Seq code
+  add java run ant tasks for executing examples
   add examples for reducer and seqs
   add release note in README
-  add SizeInfo interface
   add infinite seq constructors (continually, cycle, from supplier, ...)
   add StringReader and Tokenizer
   add IntSeq + associated Col/Reducer
@@ -29,7 +30,7 @@
   HashTrieMap
 
 backlog
-  consider equals, hashCode ?
+  consider hashCode ?
   consider linked arraylets for Seq
   try array wrapping vector + covariant builder (StoreException ?)
   add contract, invariant, generator based tests
