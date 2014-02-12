@@ -35,6 +35,20 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
     return bld.addAllThen(this).addAllThen(that).make();
   }
 
+  default boolean eq(Seq<X> that) {
+    if (this == that) return true;
+    if (that.isEmpty()) return this.isEmpty();
+    if (this.isEmpty()) return false;
+    return eqHead(that.head()) & this.tail().eq(that.tail());
+  }
+
+  default boolean eqHead(X thatHead) {
+    X thisHead = this.head();
+    if (thisHead == null) return thatHead == null;
+    if (thatHead == null) return false;
+    return thisHead.equals(thatHead);
+  }
+
   default Seq<X> reverse() { return this.reduce(empty(), Seq::cons); }
 
   default int size() { return this.reduce(0, (l,x) -> l + 1); }
