@@ -22,6 +22,13 @@ public interface Col<X,C extends Col<X,C>> extends Iterable<X>, Reducible<X> {
    *  @return true if the collection is not empty, false otherwise. */
   default boolean nonEmpty() { return !this.isEmpty(); }
 
+  /** Queries information about the size of this collection. If the collection
+   *  allows it, the Size value will be an instance of Size.Bounded. Collections
+   *  that know how to compute their own size should directly implement this
+   *  interface and use themselves as return values for sizeInfo().
+   *  @return knowledge of the size the size of this collection. */
+  Size sizeInfo();
+
   /** A persistent linear view of this collection. Implementation can be lazy.
    *  @return a sequence traversing the collection in the most canonical way. */
   Seq<X> seq();

@@ -1,5 +1,4 @@
 0.1 target
-  add SizeInfo interface
   test Seq reduce, map, filter, flatMap
   test LazySeq
   polish built script (run/exec, non console builds, add help)

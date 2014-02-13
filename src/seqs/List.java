@@ -5,8 +5,9 @@
 package jpfds.seqs;
 
 import jpfds.Seq;
+import jpfds.Size;
 
-public final class List<X> implements Seq<X> {
+public class List<X> implements Seq<X> {
 
   private final X head;
   private Seq<X> tail;
@@ -26,7 +27,10 @@ public final class List<X> implements Seq<X> {
   public X head() { return head; }
 
   public static <Y> Seq<Y> cons(Y elem, Seq<? extends Y> tail) {
-    return new List<>(elem, tail);
+    if (tail.isEmpty() || tail instanceof BoundedList)
+      return new BoundedList<>(elem, tail);
+    else
+      return new List<>(elem, tail);
   }
 
   public static <Y> SeqBuilder<Y> builder() { return new ListBuilder<>(); }
@@ -41,8 +45,25 @@ public final class List<X> implements Seq<X> {
     public static final Nil nil = new Nil();
 
     public boolean isEmpty() { return true; }
+    public Size sizeInfo() { return Size.empty; }
     public Object head() { throw Seq.emptyHeadException; }
     public Seq<Object> tail() { throw Seq.emptyTailException; }
+  }
+
+  private static class BoundedList<X> extends List<X> implements Size.Linear {
+    public BoundedList(X head, Seq<? extends X> tail) { super(head, tail); }
+    public BoundedList(X head) { super(head); }
+    public Size sizeInfo() { return this; }
+    public int size() {
+      int size = 0;
+      Seq<X> seq = this;
+      while (seq.nonEmpty()) {
+        assert seq.isEmpty() || seq instanceof BoundedList;
+        seq = seq.tail();
+        size++;
+      }
+      return size;
+    }
   }
 
   private static class ListBuilder<X> implements SeqBuilder<X> {
@@ -57,23 +78,23 @@ public final class List<X> implements Seq<X> {
     }
 
     public ListBuilder(X elem) {
-      this.end = new List<>(elem);
+      this.end = new BoundedList<>(elem);
       this.head = this.end;
     }
 
     public void cons(X elem) {
       assertUnpublished();
       if (head.isEmpty()) {
-        this.end = new List<>(elem);
+        this.end = new BoundedList<>(elem);
         this.head = this.end;
       } else {
-        this.head = new List<>(elem, this.head);
+        this.head = new BoundedList<>(elem, this.head);
       }
     }
 
     public void add(X elem) {
       assertUnpublished();
-      List<X> newEnd = new List<>(elem);
+      List<X> newEnd = new BoundedList<>(elem);
       if (head.isEmpty()) {
         this.head = newEnd;
         this.end = newEnd;
@@ -87,16 +108,6 @@ public final class List<X> implements Seq<X> {
       assertUnpublished();
       published = true;
       return this.head;
-    }
-
-    public Seq<X> concat(Seq<X> tail) {
-      assertUnpublished();
-      if (head.isEmpty()) {
-        return tail;
-      } else {
-        this.end.tail = tail;
-        return make();
-      }
     }
 
     public boolean isConsumed() { return published; }

@@ -51,6 +51,8 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
 
   default Seq<X> reverse() { return this.reduce(empty(), Seq::cons); }
 
+  default Size sizeInfo() { return Size.unknown; }
+
   default int size() { return this.reduce(0, (l,x) -> l + 1); }
 
   default Optional<X> headOpt() {
