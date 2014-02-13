@@ -14,6 +14,10 @@ describe 'a singleton Seq' do
     @seq.nonEmpty.should == true
   end
 
+  it "should have size 1" do
+    @seq.sizeInfo.size.should == 1
+  end
+
   it "should have a head" do
     @seq.head.should == 'foo'
   end
@@ -37,14 +41,19 @@ describe 'a 3 elements Seq' do
     @seq.nonEmpty.should == true
   end
 
+  it "should have size 3" do
+    @seq.sizeInfo.size.should == 3
+  end
+
   it "should have a head" do
     @seq.head.should == @elems[0]
   end
 
-  it "should have a non-empty tail which also has a head and a tail" do
+  it "should have a non-empty tail which has size 2, a head and a tail" do
     @seq.tail.isEmpty.should == false
     @seq.tail.head.should == @elems[1]
     @seq.tail.tail
+    @seq.tail.sizeInfo.size.should == 2
   end
 
 end

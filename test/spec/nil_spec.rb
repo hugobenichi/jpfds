@@ -13,11 +13,16 @@ describe 'an Empty Seq' do
     @nil.nonEmpty.should == false
   end
 
-  it "should be cons-able to form a singleton list" do
+  it "should have size 0" do
+    @nil.sizeInfo.size.should == 0
+  end
+
+  it "should be cons-able to form a singleton list with size 1" do
     l = @nil.cons("foo")
     l.isEmpty.should == false
     l.head.should == "foo"
     l.tail.isEmpty.should == true
+    l.sizeInfo.size.should == 1
   end
 
   it "should throw an error when its head is accessed" do
