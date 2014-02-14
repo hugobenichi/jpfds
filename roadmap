@@ -1,13 +1,14 @@
 0.1 target
+  add specialized LazySeq for BufferedSeqs, InfiniteSeqs
+  consider adding static helper class Seqs across all types (solve jruby calls)
+  add infinite seq constructors (continually, cycle, from supplier, ...)
   test Seq reduce, map, filter, flatMap
-  test LazySeq
   polish built script (run/exec, non console builds, add help)
   fully doc seq, seqbuilder,
-  class-lvl doc for list, LazySeq
+  class-lvl doc for List
   add java run ant tasks for executing examples
   add examples for reducer and seqs
   add release note in README
-  add infinite seq constructors (continually, cycle, from supplier, ...)
   add StringReader and Tokenizer
   add IntSeq + associated Col/Reducer
 

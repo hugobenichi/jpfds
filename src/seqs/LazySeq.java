@@ -2,10 +2,16 @@
  *              Copyright (c) Hugo Benichi. All right reserved.               *
  *----------------------------------------------------------------------------*/
 
-package jpfds;
+package jpfds.seqs;
 
 import java.util.Iterator;
+import java.util.function.Supplier;
 
+import jpfds.Seq;
+
+/** A lazy thread-safe implementation of the Seq abstraction. This lazy Seq
+ *  can handle infinite Iterator and sources and will lazily access new items
+ *  from its source only as requested by callers. */
 public final class LazySeq<X> implements Seq<X> {
 
   private static final Object NotInit = new Object();
@@ -54,11 +60,45 @@ public final class LazySeq<X> implements Seq<X> {
     }
   }
 
+  /** Creates a new lazy Seq wrapping over the given iterable object. Callers
+   *  should be careful not to retain the head of this Seq and prevent GC for
+   *  long running iterations.
+   *  @param source a object implementing Iterable. Cannot be null.
+   *  @return a lazy Seq. */
   public static <Y> Seq<Y> from(Iterable<Y> source) {
     return new LazySeq<Y>(source.iterator());
   }
 
+  /** Creates a new lazy Seq wrapping over the given itetator object. Callers
+   *  should be careful not to retain the head of this Seq and prevent GC for
+   *  long running iterations.
+   *  @param source a object implementing Iterable. Cannot be null.
+   *  @return a lazy Seq. */
   public static <Y> Seq<Y> from(Iterator<Y> source) {
     return new LazySeq<Y>(source);
   }
+
+  /** Creates a new lazy infinite Seq wrapping over the given source of object.
+   *  Callers should be careful not to retain the head of this Seq and prevent
+   *  GC for long running iterations.
+   *  @param source a Supplier of objects. Cannot be null.
+   *  @return an infinite lazy Seq. */
+  public static <Y> Seq<Y> from(final Supplier<Y> source) {
+    Iterator<Y> iter = new Iterator<Y>() {
+      public Y next() { return source.get(); }
+      public boolean hasNext() { return true; }
+      public void remove() { }
+    };
+    return new LazySeq<Y>(iter);
+  }
 }
+
+/*
+  Notes:
+    - call to next() should be protected in case of failure, fallback on Empty
+    - from(Supplier) should returne a specialized subclass that return infinite
+      for sizeInfo and that share the code with LazySeq, but avoid creating an
+      internal Iterator.
+    - there should be a non-thread safe subclass that can only be generated from
+      known immutable sources (other sequences). Call it BufferedSeq
+*/
