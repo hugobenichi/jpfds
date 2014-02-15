@@ -11,10 +11,12 @@ public final class Seqs {
   private Seqs() {}
   public static <Y> Seq<Y> nil() { return Seq.nil(); }
   public static <Y> SeqBuilder<Y> builder() { return SeqBuilder.get(); }
+
   public static <Y> Seq<Y> lazy(Iterable<Y> source) {
     return LazySeq.from(source);
   }
   public static <Y> Seq<Y> infinite(Supplier<Y> source) {
     return LazySeq.from(source);
   }
+  public static <Y> Seq<Y> buffer(Seq<Y> seq) { return LazySeq.from(seq); }
 }
