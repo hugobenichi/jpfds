@@ -54,9 +54,9 @@ end
 task :load_jar => :jar do
   #require Dir.pwd + '/out/' + jarname
   jruby_loader = JRuby.runtime.jruby_class_loader
-  urls = [ java.io.File.new(Dir.pwd + '/out/' + jarname).to_url ]
-  jar_loader = java.net.URLClassLoader.new(urls.to_java(Java::java.net.URL), jruby_loader)
-  loader.add_url(java.io.File.new(Dir.pwd + '/out/' + jarname).to_url)
+  #urls = [ java.io.File.new(Dir.pwd + '/out/' + jarname).to_url ]
+  #jar_loader = java.net.URLClassLoader.new(urls.to_java(Java::java.net.URL), jruby_loader)
+  jruby_loader.add_url(java.io.File.new(Dir.pwd + '/out/' + jarname).to_url)
 end
 
 desc 'generate javadoc'
