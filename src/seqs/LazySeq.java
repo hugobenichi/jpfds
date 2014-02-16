@@ -23,8 +23,7 @@ public class LazySeq<X> extends BaseLazySeq<X> {
       this.head = iter.next();
       this.tail = new LazySeq<X>(iter);
     } else {
-      this.head = Empty;
-      this.tail = Empty;
+      setEmpty();
     }
   }
 

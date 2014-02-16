@@ -29,6 +29,8 @@ public abstract class BaseLazySeq<X> implements Seq<X> {
 
   public boolean isEmpty() { ensureInit(); return this.head == Empty; }
 
+  protected void setEmpty() { this.head = Empty; this.tail = Empty; }
+
   protected boolean notInit() { return this.head == NotInit; }
 
   public X head() {
@@ -59,8 +61,7 @@ public abstract class BaseLazySeq<X> implements Seq<X> {
       protected void ensureInit() { if (notInit()) advance(); }
       protected void advance() {
         if (source.isEmpty()) {
-          this.head = Empty;
-          this.tail = Empty;
+          setEmpty();
         } else {
           this.head = f.apply(source.head());
           this.tail = lmap(f, source.tail());

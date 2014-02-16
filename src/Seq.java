@@ -6,9 +6,10 @@ package jpfds;
 
 import java.util.Iterator;
 import java.util.Optional;
-import java.util.function.Supplier;
-import java.util.function.Function;
 import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import jpfds.seqs.List;
 import jpfds.seqs.SeqBuilder;
@@ -88,12 +89,30 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
       protected void ensureInit() { if (notInit()) advance(); }
       protected void advance() {
         if (source.isEmpty()) {
-          this.head = Empty;
-          this.tail = Empty;
+          setEmpty();
         } else {
           this.head = f.apply(source.head());
           this.tail = source.tail().lmap(f);
         }
+      }
+    };
+  }
+
+  default Seq<X> lfilter(final Predicate<X> f) {
+    final Seq<X> source = this;
+    return new BaseLazySeq<X>() {
+      protected void ensureInit() { if (notInit()) advance(); }
+      protected void advance() {
+        Seq<X> s = source;
+        while (s.nonEmpty()) {
+          if (f.test(s.head())) {
+            this.head = s.head();
+            this.tail = s.tail().lfilter(f);
+            return;
+          }
+          s = s.tail();
+        }
+        setEmpty();
       }
     };
   }
