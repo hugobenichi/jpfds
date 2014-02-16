@@ -16,16 +16,11 @@ import jpfds.Size;
  *  from its source only as requested by callers. */
 public abstract class BaseLazySeq<X> implements Seq<X> {
 
-  public static final Object NotInit = new Object();
-  public static final Object Empty = new Object();
+  private static final Object NotInit = new Object();
+  private static final Object Empty = new Object();
 
-  protected Object head;
-  protected Object tail;
-
-  /* temporary */
-  protected BaseLazySeq() { setTo(NotInit, NotInit); }
-
-  protected BaseLazySeq(Object h, Object t) { setTo(h,t); }
+  private Object head = NotInit;
+  private Object tail = NotInit;
 
   protected void setEmpty() { this.head = Empty; this.tail = Empty; }
 
