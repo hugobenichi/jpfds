@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.function.Supplier;
 
 import jpfds.seqs.SeqBuilder;
-import jpfds.seqs.BaseLazySeq;
+import jpfds.seqs.LazySeq;
 
 /** Work around Java interface wrapping of JRuby which does not know about
  *  static methods in Java 8 interfaces yet. */
@@ -30,7 +30,7 @@ public final class Seqs {
    *  @param source a object implementing Iterable. Cannot be null.
    *  @return a lazy Seq. */
   public static <Y> Seq<Y> buffer(final Iterator<Y> iter) {
-    return new BaseLazySeq<Y>() {
+    return new LazySeq.Synchronized<Y>() {
       protected void advance() {
         if (iter.hasNext())
           setTo(iter.next(), buffer(iter));
@@ -46,7 +46,7 @@ public final class Seqs {
    *  @param source a Supplier of objects. Cannot be null.
    *  @return an infinite lazy Seq. */
   public static <Y> Seq<Y> infinite(final Supplier<Y> source) {
-    return new BaseLazySeq<Y>() {
+    return new LazySeq.Synchronized<Y>() {
       public Size sizeInfo() { return Size.infinite; }
       protected void advance() {
         setTo(source.get(), infinite(source));

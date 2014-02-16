@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 
 import jpfds.seqs.List;
 import jpfds.seqs.SeqBuilder;
-import jpfds.seqs.BaseLazySeq;
+import jpfds.seqs.LazySeq;
 
 public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
 
@@ -85,8 +85,7 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
 
   default <Y> Seq<Y> lmap(final Function<X,Y> f) {
     final Seq<X> source = this;
-    return new BaseLazySeq<Y>() {
-      protected void ensureInit() { if (notInit()) advance(); }
+    return new LazySeq<Y>() {
       protected void advance() {
         if (source.isEmpty()) {
           setEmpty();
@@ -99,8 +98,7 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
 
   default Seq<X> lfilter(final Predicate<X> f) {
     final Seq<X> source = this;
-    return new BaseLazySeq<X>() {
-      protected void ensureInit() { if (notInit()) advance(); }
+    return new LazySeq<X>() {
       protected void advance() {
         Seq<X> s = source;
         while (s.nonEmpty()) {
