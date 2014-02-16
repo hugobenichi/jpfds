@@ -83,15 +83,28 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
     };
   }
 
+  default Seq<X> lcat(final Seq<X> right) {
+    final Seq<X> left = this;
+    return new LazySeq<X>() {
+      protected void advance() {
+        if (left.nonEmpty())
+          setTo(left.head(), left.tail().lcat(right));
+        else if (right.nonEmpty())
+          setTo(right.head(), right.tail());
+        else
+          setEmpty();
+      }
+    };
+  }
+
   default <Y> Seq<Y> lmap(final Function<X,Y> f) {
     final Seq<X> source = this;
     return new LazySeq<Y>() {
       protected void advance() {
-        if (source.isEmpty()) {
+        if (source.isEmpty())
           setEmpty();
-        } else {
+        else
           setTo(f.apply(source.head()), source.tail().lmap(f));
-        }
       }
     };
   }
@@ -100,13 +113,11 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
     final Seq<X> source = this;
     return new LazySeq<X>() {
       protected void advance() {
-        Seq<X> s = source;
-        while (s.nonEmpty()) {
+        for (Seq<X> s = source; s.nonEmpty(); s = s.tail()) {
           if (f.test(s.head())) {
             setTo(s.head(), s.tail().lfilter(f));
             return;
           }
-          s = s.tail();
         }
         setEmpty();
       }

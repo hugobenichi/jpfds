@@ -34,6 +34,44 @@ class SourceIterator
   end
 end
 
+def randData
+  ["foo", "bar", "baz", "a", "b", "c", "oo", "fp"][0..rand(7)].shuffle!
+end
+
+def fromArray array
+  array.inject(Seqs.nil) { |l,x| l.cons x }
+end
+
+describe 'Seq#lcat()' do
+
+  it "should return the Empty Seq when concatenating the Empty Seq to itself" do
+    Seqs.nil.lcat(Seqs.nil).eq(Seqs.nil).should == true
+  end
+
+  it "should be a noop when concatenating the empty Seq to any Seq" do
+    10.times do
+      l = fromArray randData
+      l.lcat(Seqs.nil).eq(l).should == true
+    end
+  end
+
+  it "should the list concatenated to the empty Seq for any list" do
+    10.times do
+      l = fromArray randData
+      Seqs.nil.lcat(l).eq(l).should == true
+    end
+  end
+
+  it "should return the same result as Seq#union, not considering lazyness" do
+    10.times do
+      l = fromArray randData
+      r = fromArray randData
+      l.lcat(r).eq(l.union r).should == true
+    end
+  end
+
+end
+
 describe 'Seq#lmap()' do
 
   def id
@@ -42,14 +80,6 @@ describe 'Seq#lmap()' do
 
   def rev
     Class.new { def apply x; x.reverse end }.new
-  end
-
-  def randData
-    ["foo", "bar", "baz", "a", "b", "c", "oo", "fp"][0..rand(7)].shuffle!
-  end
-
-  def fromArray array
-    array.inject(Seqs.nil) { |l,x| l.cons x }
   end
 
   it "should map the empty Seq to the empty Seq for any transformation" do
@@ -99,14 +129,6 @@ describe 'Seq#lfilter()' do
       def initialize len; @len = len end
       def test x; x.length < @len end
     }.new len
-  end
-
-  def randData
-    ["foo", "bar", "baz", "a", "b", "c", "oo", "fp"][0..rand(7)].shuffle!
-  end
-
-  def fromArray array
-    array.inject(Seqs.nil) { |l,x| l.cons x }
   end
 
   it "should map the empty Seq to the empty Seq for any filter" do
