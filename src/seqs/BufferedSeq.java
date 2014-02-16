@@ -4,8 +4,6 @@
 
 package jpfds.seqs;
 
-import java.util.function.Function;
-
 import jpfds.Seq;
 
 class BufferedSeq<X> extends BaseLazySeq<X> {
@@ -21,10 +19,4 @@ class BufferedSeq<X> extends BaseLazySeq<X> {
     }
   }
 
-/*
-  public static <Y,Z> Seq<Z> map(Function<Y,Z> f, Seq<Y> source) {
-    return new BufferedSeq<Y>
-
-  }
-*/
 }

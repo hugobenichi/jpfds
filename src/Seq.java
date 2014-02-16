@@ -7,10 +7,12 @@ package jpfds;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.function.Function;
 import java.util.function.BiFunction;
 
 import jpfds.seqs.List;
 import jpfds.seqs.SeqBuilder;
+import jpfds.seqs.BaseLazySeq;
 
 public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
 
@@ -76,6 +78,22 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
         X nextValue = seq.head();
         seq = seq.tail();
         return nextValue;
+      }
+    };
+  }
+
+  default <Y> Seq<Y> lmap(final Function<X,Y> f) {
+    final Seq<X> source = this;
+    return new BaseLazySeq<Y>() {
+      protected void ensureInit() { if (notInit()) advance(); }
+      protected void advance() {
+        if (source.isEmpty()) {
+          this.head = Empty;
+          this.tail = Empty;
+        } else {
+          this.head = f.apply(source.head());
+          this.tail = source.tail().lmap(f);
+        }
       }
     };
   }
