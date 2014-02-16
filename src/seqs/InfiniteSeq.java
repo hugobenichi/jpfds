@@ -14,7 +14,6 @@ class InfiniteSeq<X> extends BaseLazySeq<X> {
   protected void advance() {
     @SuppressWarnings("unchecked")
     Supplier<X> source = (Supplier<X>) this.tail;
-    this.head = source.get();
-    this.tail = new InfiniteSeq<X>(source);
+    setTo(source.get(), new InfiniteSeq<X>(source));
   }
 }

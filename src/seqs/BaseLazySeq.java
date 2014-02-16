@@ -23,13 +23,15 @@ public abstract class BaseLazySeq<X> implements Seq<X> {
   protected Object tail;
 
   /* temporary */
-  protected BaseLazySeq() { this.head = NotInit; this.tail = NotInit; }
+  protected BaseLazySeq() { setTo(NotInit, NotInit); }
 
-  protected BaseLazySeq(Object h, Object t) { this.head = h; this.tail = t; }
-
-  public boolean isEmpty() { ensureInit(); return this.head == Empty; }
+  protected BaseLazySeq(Object h, Object t) { setTo(h,t); }
 
   protected void setEmpty() { this.head = Empty; this.tail = Empty; }
+
+  protected void setTo(Object h, Object t) { this.head = h; this.tail = t; }
+
+  public boolean isEmpty() { ensureInit(); return this.head == Empty; }
 
   protected boolean notInit() { return this.head == NotInit; }
 
@@ -55,19 +57,5 @@ public abstract class BaseLazySeq<X> implements Seq<X> {
   private synchronized void tryAdvance() { if (notInit()) advance(); }
 
   abstract protected void advance();
-
-  public static <Y,Z> Seq<Z> lmap(final Function<Y,Z> f, final Seq<Y> source) {
-    return new BaseLazySeq<Z>() {
-      protected void ensureInit() { if (notInit()) advance(); }
-      protected void advance() {
-        if (source.isEmpty()) {
-          setEmpty();
-        } else {
-          this.head = f.apply(source.head());
-          this.tail = lmap(f, source.tail());
-        }
-      }
-    };
-  }
 
 }

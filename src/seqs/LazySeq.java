@@ -20,8 +20,7 @@ public class LazySeq<X> extends BaseLazySeq<X> {
   protected void advance() {
     @SuppressWarnings("unchecked") Iterator<X> iter = (Iterator<X>) this.tail;
     if (iter.hasNext()) {
-      this.head = iter.next();
-      this.tail = new LazySeq<X>(iter);
+      setTo(iter.next(), new LazySeq<X>(iter));
     } else {
       setEmpty();
     }

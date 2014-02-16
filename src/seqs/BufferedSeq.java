@@ -14,8 +14,7 @@ class BufferedSeq<X> extends BaseLazySeq<X> {
     if (!(localTail instanceof BufferedSeq)) {
       @SuppressWarnings("unchecked")
       Seq<X> source = (Seq<X>) localTail;
-      this.head = source.head();
-      this.tail = new BufferedSeq<X>(source.tail());
+      setTo(source.head(), new BufferedSeq<X>(source.tail()));
     }
   }
 

@@ -91,8 +91,7 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
         if (source.isEmpty()) {
           setEmpty();
         } else {
-          this.head = f.apply(source.head());
-          this.tail = source.tail().lmap(f);
+          setTo(f.apply(source.head()), source.tail().lmap(f));
         }
       }
     };
@@ -106,8 +105,7 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
         Seq<X> s = source;
         while (s.nonEmpty()) {
           if (f.test(s.head())) {
-            this.head = s.head();
-            this.tail = s.tail().lfilter(f);
+            setTo(s.head(), s.tail().lfilter(f));
             return;
           }
           s = s.tail();
