@@ -109,6 +109,22 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
     };
   }
 
+  default <Y> Seq<Y> lflatMap(final Function<X,Seq<Y>> f) {
+    final Seq<X> source = this;
+    return new LazySeq<Y>() {
+      protected void advance() {
+        for (Seq<X> s = source; s.nonEmpty(); s = s.tail()) {
+          Seq<Y> front = f.apply(s.head());
+          if (front.nonEmpty()) {
+            setTo(front.head(), front.tail().lcat(s.tail().lflatMap(f)));
+            return;
+          }
+        }
+        setEmpty();
+      }
+    };
+  }
+
   default Seq<X> lfilter(final Predicate<X> f) {
     final Seq<X> source = this;
     return new LazySeq<X>() {

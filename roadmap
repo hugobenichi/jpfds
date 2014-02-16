@@ -1,7 +1,8 @@
 0.1 target
-  consider adding static helper class Seqs across all types (solve jruby calls)
+  test lflatmap
   add infinite seq constructors (continually, cycle, from supplier, ...)
   test Reducible reduce, map, filter, flatMap
+  consider adding static helper class Seqs across all types (solve jruby calls)
   polish built script (run/exec, non console builds, add help)
   fully doc seq, seqbuilder,
   class-lvl doc for List
