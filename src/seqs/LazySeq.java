@@ -40,7 +40,7 @@ public abstract class LazySeq<X> implements Seq<X> {
 
   protected void setEmpty() { this.head = Empty; this.tail = Empty; }
 
-  protected void setTo(Object h, Object t) { this.head = h; this.tail = t; }
+  protected void setTo(X h, Seq<X> t) { this.head = h; this.tail = t; }
 
   protected boolean notInit() { return this.head == NotInit; }
 
