@@ -1,2 +1,2 @@
-/** This namespace contains experimental APIs for research purposes. */
+/** Namespace containing experimental APIs for research purposes; do not use. */
 package jpfds.experimental;

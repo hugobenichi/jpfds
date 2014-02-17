@@ -18,6 +18,7 @@ public final class Seqs {
   /** Creates a new lazy Seq wrapping over the given iterable object. Callers
    *  should be careful not to retain the head of this Seq and prevent GC for
    *  long running iterations.
+   *  @param <Y> type of the elements in the given Iterable source.
    *  @param source a object implementing Iterable. Cannot be null.
    *  @return a lazy Seq. */
   public static <Y> Seq<Y> lazy(Iterable<Y> source) {
@@ -27,7 +28,8 @@ public final class Seqs {
   /** Creates a new lazy Seq wrapping over the given itetator object. Callers
    *  should be careful not to retain the head of this Seq and prevent GC for
    *  long running iterations.
-   *  @param source a object implementing Iterable. Cannot be null.
+   *  @param <Y> type of the elements in the given Iterator.
+   *  @param iter a object implementing Iterable. Cannot be null.
    *  @return a lazy Seq. */
   public static <Y> Seq<Y> buffer(final Iterator<Y> iter) {
     return new LazySeq.Synchronized<Y>() {
@@ -43,6 +45,7 @@ public final class Seqs {
   /** Creates a new lazy infinite Seq wrapping over the given source of object.
    *  Callers should be careful not to retain the head of this Seq and prevent
    *  GC for long running iterations.
+   *  @param <Y> type of the elements produced by the given source.
    *  @param source a Supplier of objects. Cannot be null.
    *  @return an infinite lazy Seq. */
   public static <Y> Seq<Y> infinite(final Supplier<Y> source) {
