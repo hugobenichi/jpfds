@@ -1,4 +1,4 @@
-package jpfds.abs;
+package jpfds.experimental;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -7,7 +7,9 @@ import java.util.stream.Stream;
 // add standard java collection implementation
 // add ordered index interface
 // implement Seq via slices for tail
-public interface Vec<X> extends Container, Countable, Iterable<X>, IntFun<X> {
+public interface Vec<X> extends Iterable<X>, IntFun<X> {
+
+  default int size() { return 0; }
 
   default Iterator<X> iterator() {
     final Vec<X> vec = this;

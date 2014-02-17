@@ -1,4 +1,4 @@
-package jpfds.abs;
+package jpfds.experimental;
 
 import java.util.function.IntPredicate;
 

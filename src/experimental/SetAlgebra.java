@@ -1,4 +1,4 @@
-package jpfds.abs;
+package jpfds.experimental;
 
 public interface SetAlgebra<S extends SetAlgebra<S>> {
   S empty();

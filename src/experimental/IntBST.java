@@ -1,9 +1,7 @@
-package jpfds.col;
-
-import jpfds.abs.*;
+package jpfds.experimental;
 
 public abstract class IntBST
-    implements Container, IntSet, IntSetAssoc<IntBST>, SetAlgebra<IntBST> {
+    implements IntSet, IntSetAssoc<IntBST>, SetAlgebra<IntBST> {
 
   /* IntSet */
   abstract public boolean has(int elem);

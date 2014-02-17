@@ -1,4 +1,4 @@
-package jpfds.abs;
+package jpfds.experimental;
 
 public interface IntSetAssoc<S extends IntSetAssoc<S>> {
   S insert(int elem);
