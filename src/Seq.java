@@ -4,6 +4,7 @@
 
 package jpfds;
 
+import java.util.Objects;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -42,14 +43,8 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
     if (this == that) return true;
     if (that.isEmpty()) return this.isEmpty();
     if (this.isEmpty()) return false;
-    return eqHead(that.head()) & this.tail().eq(that.tail());
-  }
-
-  default boolean eqHead(X thatHead) {
-    X thisHead = this.head();
-    if (thisHead == null) return thatHead == null;
-    if (thatHead == null) return false;
-    return thisHead.equals(thatHead);
+    return Objects.equals(this.head(), that.head())
+      && this.tail().eq(that.tail());
   }
 
   default Seq<X> reverse() { return this.reduce(empty(), Seq::cons); }
