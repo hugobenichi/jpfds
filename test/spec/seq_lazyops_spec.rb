@@ -171,3 +171,48 @@ describe 'Seq#lfilter()' do
   end
 
 end
+
+describe 'Seq#lflatMap()' do
+
+  def toNil
+    Class.new { def apply x; Seqs.nil; end }.new
+  end
+
+  def toBox
+    Class.new { def apply x; Seqs.nil.cons(x) end }.new
+  end
+
+  def toConst y
+    Class.new { def apply x; Seqs.nil.cons(y) end }.new
+  end
+
+  it "should map the empty Seq to the empty Seq for any op" do
+    Seqs.nil.lflatMap(toNil).isEmpty.should == true
+    Seqs.nil.lflatMap(toBox).isEmpty.should == true
+  end
+
+  it "should map any Seq to itself when flatMapping to a singleton Seq" do
+    10.times do
+      l = fromArray randData
+      l.lflatMap(toBox).eq(l).should == true
+    end
+  end
+
+  it "should map any Seq to the empty Seq when flatMapping to the empty Seq" do
+    10.times do
+      l = fromArray randData
+      l.lflatMap(toNil).isEmpty.should == true
+    end
+  end
+
+  it "should not consume items from a Lazy Seq unless needed" do
+    source = Source.new "foo"
+    ls = Seqs.lazy(source).lflatMap(toBox)
+    10.times do |i|
+      source.calls.should == i
+      ls.head()
+      ls = ls.tail()
+    end
+  end
+
+end
