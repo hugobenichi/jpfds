@@ -6,15 +6,51 @@ import java.util.function.Function;
 
 import jpfds.seqs.SeqBuilder;
 import jpfds.seqs.LazySeq;
+import jpfds.seqs.List;
 
 /** Work around Java interface wrapping of JRuby which does not know about
  *  static methods in Java 8 interfaces yet. */
 public final class Seqs {
   private Seqs() {}
 
-  public static <Y> Seq<Y> nil() { return Seq.nil(); }
+  public static <Y> Seq<Y> nil() { return List.nil(); }
+
+  public static <Y> Seq<Y> cons(Y elem, Seq<? extends Y> seq) {
+    return List.cons(elem, seq);
+  }
 
   public static <Y> SeqBuilder<Y> builder() { return SeqBuilder.get(); }
+
+  public static <Y> Seq<Y> of(Iterable<Y> elems) {
+    SeqBuilder<Y> bld = builder();
+    return bld.addAllThen(elems).make();
+  }
+
+  public static <Y> Seq<Y> of(Y... args) {
+    SeqBuilder<Y> bld = builder();
+    for (Y y : args) { bld.add(y); }
+    return bld.make();
+  }
+
+  public static <Y> Seq<Y> of(Y y1) {
+    SeqBuilder<Y> bld = builder();
+    return bld.addThen(y1).make();
+  }
+
+  public static <Y> Seq<Y> of(Y y1, Y y2) {
+    SeqBuilder<Y> bld = builder();
+    return bld.addThen(y1).addThen(y2).make();
+  }
+
+  public static <Y> Seq<Y> of(Y y1, Y y2, Y y3) {
+    SeqBuilder<Y> bld = builder();
+    return bld.addThen(y1).addThen(y2).addThen(y3).make();
+  }
+
+  public static <Y> Seq<Y> of(Y y1, Y y2, Y y3, Y y4) {
+    SeqBuilder<Y> bld = SeqBuilder.get();
+    return bld.addThen(y1).addThen(y2).addThen(y3).addThen(y4).make();
+  }
 
   /** Creates a new lazy Seq wrapping over the given iterable object. Callers
    *  should be careful not to retain the head of this Seq and prevent GC for

@@ -12,8 +12,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import jpfds.seqs.List;
-import jpfds.seqs.SeqBuilder;
 import jpfds.seqs.LazySeq;
 
 public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
@@ -31,12 +29,11 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
   }
 
   default Seq<X> seq() { return this; }
-  default Seq<X> cons(X elem) { return Seq.cons(elem, this); }
+  default Seq<X> cons(X elem) { return Seqs.cons(elem, this); }
   default Seq<X> add(X elem) { return this.cons(elem); }
-  default Seq<X> empty() { return List.nil(); }
+  default Seq<X> empty() { return Seqs.nil(); }
   default Seq<X> union(Seq<X> that) {
-    SeqBuilder<X> bld = SeqBuilder.get();
-    return bld.addAllThen(this).addAllThen(that).make();
+    return Seqs.<X>builder().addAllThen(this).addAllThen(that).make();
   }
 
   default boolean eq(Seq<X> that) {
@@ -47,7 +44,7 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
       && this.tail().eq(that.tail());
   }
 
-  default Seq<X> reverse() { return this.reduce(empty(), Seq::cons); }
+  default Seq<X> reverse() { return this.reduce(empty(), (s,x) -> s.cons(x)); }
 
   default Size sizeInfo() { return Size.unknown; }
 
@@ -134,34 +131,6 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
       }
     };
   }
-
-  static <Y> Seq<Y> cons(Y elem, Seq<? extends Y> seq) {
-    return List.cons(elem, seq);
-  }
-
-  static <Y> Seq<Y> of(Iterable<Y> elems) {
-    SeqBuilder<Y> bld = SeqBuilder.get();
-    return bld.addAllThen(elems).make();
-  }
-
-  static <Y> Seq<Y> of(Y y1) {
-    return SeqBuilder.<Y>get().addThen(y1).make();
-  }
-
-  static <Y> Seq<Y> of(Y y1, Y y2) {
-    return SeqBuilder.<Y>get().addThen(y1).addThen(y2).make();
-  }
-
-  static <Y> Seq<Y> of(Y y1, Y y2, Y y3) {
-    return SeqBuilder.<Y>get().addThen(y1).addThen(y2).addThen(y3).make();
-  }
-
-  static <Y> Seq<Y> of(Y y1, Y y2, Y y3, Y y4) {
-    SeqBuilder<Y> bld = SeqBuilder.get();
-    return bld.addThen(y1).addThen(y2).addThen(y3).addThen(y4).make();
-  }
-
-  static <Y> Seq<Y> nil() { return List.nil(); }
 
   RuntimeException removeException =
     new UnsupportedOperationException("Seq Iterators do not support remove().");

@@ -6,14 +6,14 @@ package jpfds.examples;
 
 import jpfds.*;
 
-public final class Seqs {
-  private Seqs() { }
+public final class SeqExamples {
+  private SeqExamples() { }
 
   private static final java.io.PrintStream cout = System.out;
 
   public static void example() {
 
-    Seq<String> xs = Seq.nil();
+    Seq<String> xs = Seqs.nil();
 
     cout.println(xs.isEmpty());
 
@@ -25,7 +25,7 @@ public final class Seqs {
     int total = xs.map((s) -> s.length()).reduce(0, (t, s) -> t+s);
     cout.println(total);
 
-    Seq<Integer> is = Seq.of(1,2,3);
+    Seq<Integer> is = Seqs.of(1,2,3);
     //Seq<Integer> is = Seq.nil();
     is = is.cons(10).cons(20).cons(30);
 
