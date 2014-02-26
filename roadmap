@@ -1,5 +1,4 @@
 0.1 target
-  add take, drop, from, skip, until to Seq, remove from Reducer
   other seq utils: String seq from BufferedReader, String seq from split regex
   test Reducible reduce, map, filter, flatMap
   polish built script (file tasks, run/exec, non console builds, add help)

@@ -1,6 +1,29 @@
 require 'java'
 
 java_import 'jpfds.Seqs'
+java_import 'jpfds.Size'
+
+def all
+  Class.new { def test x; true end }.new
+end
+
+def none
+  Class.new { def test x; false end }.new
+end
+
+def lenLessThan len
+  Class.new {
+    def initialize len; @len = len end
+    def test x; x.length < @len end
+  }.new len
+end
+
+def lessThan x
+  Class.new {
+    def initialize x; @x = x end
+    def test x; x < @x end
+  }.new x
+end
 
 class Source
   attr_reader :calls
@@ -116,21 +139,6 @@ end
 
 describe 'Seq#lfilter()' do
 
-  def all
-    Class.new { def test x; true end }.new
-  end
-
-  def none
-    Class.new { def test x; false end }.new
-  end
-
-  def lenLessThan len
-    Class.new {
-      def initialize len; @len = len end
-      def test x; x.length < @len end
-    }.new len
-  end
-
   it "should map the empty Seq to the empty Seq for any filter" do
     Seqs.nil.lfilter(all).isEmpty.should == true
     Seqs.nil.lfilter(none).isEmpty.should == true
@@ -213,6 +221,105 @@ describe 'Seq#lflatMap()' do
       ls.head()
       ls = ls.tail()
     end
+  end
+
+end
+
+describe 'Seq#take()' do
+
+  it "should return the empty Seq when taking 0" do
+    10.times do
+      fromArray(randData).take(0).isEmpty.should == true
+    end
+  end
+
+  it "should takes the first items in a Seq" do
+    l = Seqs.induce(0) { |x| x + 1 }
+    Seqs.nil.cons(2).cons(1).cons(0).eq(l.take(3)).should == true
+  end
+
+  it "should return the same Seq when taking the number of items in a Seq" do
+    10.times do
+      l = fromArray(randData)
+      l.take(l.sizeInfo.size).eq(l).should == true
+    end
+  end
+
+  it "should return the same Seq when taking more items there is in a Seq" do
+    10.times do
+      l = fromArray(randData)
+      l.take(2 * l.sizeInfo.size).eq(l).should == true
+    end
+  end
+
+  it "should return a list with no more items than n for longer than n Seqs" do
+    10.times do
+      l = fromArray(randData)
+      s = l.size / 2
+      l.take(s).size.should == s
+    end
+  end
+
+  it "should return a bounded Seq from an infinite Seq" do
+    l = Seqs.constant "foo"
+    #l.take(10).sizeInfo.should != Size.infinite # to implement
+  end
+
+end
+
+describe 'Seq#skip()' do
+
+  it "should return the empty Seq from the empty Seq" do
+    Seqs.nil.skip(10).isEmpty.should == true
+  end
+
+  it "should skip the first items in a Seq" do
+    l = Seqs.induce(0) { |x| x + 1 }
+    10.times { |i| l.skip(i).head.should == i }
+  end
+
+  it "should return the empty Seq when skipping the number of items in a Seq" do
+    10.times do
+      l = fromArray(randData)
+      l.skip(l.sizeInfo.size).isEmpty.should == true
+    end
+  end
+
+  it "should return the empty Seq when skipping more items there is in a Seq" do
+    10.times do
+      l = fromArray(randData)
+      l.skip(2 * l.sizeInfo.size).isEmpty.should == true
+    end
+  end
+
+end
+
+describe 'Seq#until()' do
+
+  it "should return the empty Seq from any Seq when the test returns false" do
+    10.times do
+      fromArray(randData).until(none).isEmpty.should == true
+    end
+  end
+
+  it "should return the same Seq when the test returns true" do
+    10.times do
+      l = fromArray(randData)
+      l.until(all).eq(l).should == true
+    end
+  end
+
+  it "should stop the Seq when the test fails for the first time" do
+    l = Seqs.induce(0) { |x| x + 1 }
+    l.until(lessThan 3).eq(l.take(3)).should == true
+  end
+
+  it "should be idempotent" do
+    l = Seqs.induce(0) { |x| x + 1 }
+    10.times { |i|
+      t = l.until(lessThan 3)
+      t.until(lessThan 3).eq(t).should == true
+    }
   end
 
 end

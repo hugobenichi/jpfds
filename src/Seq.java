@@ -132,6 +132,53 @@ public interface Seq<X> extends Iterable<X>, Col<X,Seq<X>> {
     };
   }
 
+  /** Keep the first n elements of this Seq.
+   *  @param n the number of initial elements to keep.
+   *  @return a lazy Seq that stops after producing the n first initial
+   *  elements of this Seq. */
+  default Seq<X> take(final int n) {
+    if (n <= 0) return empty();
+    final Seq<X> source = this;
+    return new LazySeq<X>() {
+      protected void advance() {
+        if (source.nonEmpty())
+          setTo(source.head(), source.tail().take(n-1));
+        else
+          setEmpty();
+      }
+    };
+  }
+
+  /** Skips the n first elements of this Seq.
+   *  @param n the number of initial elements to skip.
+   *  @return a lazy Seq that skips the n first initial elements of this Seq. */
+  default Seq<X> skip(final int n) {
+    if (n <= 0) return this;
+    final Seq<X> source = this;
+    return new LazySeq<X>() {
+      protected void advance() {
+        Seq<X> s = source;
+        for (int c = n; c > 0 && s.nonEmpty(); c--) { s = s.tail(); }
+        if (s.nonEmpty()) setTo(s.head(), s.tail()); else setEmpty();
+      }
+    };
+  }
+
+  /** Keep elements from this Seq until the predicate holds true.
+   *  @param f a boolean predicate. Cannot be null.
+   *  @return a lazy Seq that stops at the first failure of the predicate. */
+  default Seq<X> until(final Predicate<X> f) {
+    final Seq<X> source = this;
+    return new LazySeq<X>() {
+      protected void advance() {
+        if (source.nonEmpty() && f.test(source.head()))
+          setTo(source.head(), source.tail().until(f));
+        else
+          setEmpty();
+      }
+    };
+  }
+
   RuntimeException removeException =
     new UnsupportedOperationException("Seq Iterators do not support remove().");
 
