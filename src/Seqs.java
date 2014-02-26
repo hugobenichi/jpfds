@@ -2,6 +2,7 @@ package jpfds;
 
 import java.util.Iterator;
 import java.util.function.Supplier;
+import java.util.function.Function;
 
 import jpfds.seqs.SeqBuilder;
 import jpfds.seqs.LazySeq;
@@ -56,4 +57,39 @@ public final class Seqs {
       }
     };
   }
+
+  public static <Y> Seq<Y> constant(Y value) {
+    return new LazySeq<Y>() {
+      public Size sizeInfo() { return Size.infinite; }
+      protected void advance() { setTo(value, this); }
+    };
+  }
+
+  /** Creates an infinite Seq from a seed and an induction rule.
+   *  Callers should be careful not to retain the head of this Seq and prevent
+   *  GC for long running iterations.
+   *  @param <Y> type of the elements of this sequence.
+   *  @param init the first value of this sequence.
+   *  @param rule an induction rule for computing the next value.
+   *  @return a lazy infinite sequence. */
+  public static <Y> Seq<Y> induce(Y init, Function<Y,Y> rule) {
+    return new LazySeq<Y>() {
+      public Size sizeInfo() { return Size.infinite; }
+      protected void advance() {
+        Y next = rule.apply(init);
+        setTo(init, induce(next, rule));
+      }
+    };
+  }
+
+  /** Creates an infinite cyclic Seq repeating the elements in the given Seq.
+   *  Callers should be careful not to retain the head of this Seq and prevent
+   *  GC for long running iterations.
+   *  @param <Y> type of the elements produced by the given source.
+   *  @param source any sequence. Cannot be null.
+   *  @return a sequence that repeats itself. */
+  public static <Y> Seq<Y> cycle(final Seq<Y> source) {
+    return constant(null).lflatMap(any -> source);
+  }
+
 }
