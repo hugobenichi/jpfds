@@ -7,6 +7,12 @@ package jpfds.seqs;
 import jpfds.Seq;
 import jpfds.Size;
 
+/** The canonical implementation of a Seq. List is an immutable singly linked
+ *  list that knows it is bounded and knows how to compute its size. It also
+ *  provides a Builder implementation that can efficiently append at the end of
+ *  a List being built, until it is published. List instances can be created
+ *  on top of any type of Seq, which allows to mix lazy and strict List
+ *  instances. */
 public class List<X> implements Seq<X> {
 
   private final X head;
@@ -26,6 +32,11 @@ public class List<X> implements Seq<X> {
   public Seq<X> tail() { return tail; }
   public X head() { return head; }
 
+  /** A covariant constructor for adding an element at the front of a Seq.
+   *  @param elem an element reference. Can be null.
+   *  @param tail any type of Seq. Cannot be null.
+   *  @param <Y> type of the element added at the front of the given Seq.
+   *  @return a new Seq made of the given arguments using the List class. */
   public static <Y> Seq<Y> cons(Y elem, Seq<? extends Y> tail) {
     if (tail.isEmpty() || tail instanceof BoundedList)
       return new BoundedList<>(elem, tail);
@@ -33,8 +44,16 @@ public class List<X> implements Seq<X> {
       return new List<>(elem, tail);
   }
 
+  /** Creates a new empty SeqBuilder object for creating a List instance.
+   *  @param <Y> type of the elements this Builder should accept.
+   *  @return an empty SeqBuilder. */
   public static <Y> SeqBuilder<Y> builder() { return new ListBuilder<>(); }
 
+  /** Return a reference to the empty List. The underlying object representing
+   *  the empty List is a singleton shared accross all types.
+   *  @param <Y> type of the elements this reference to the empty List should
+   *  be for.
+   *  @return the empty List. */
   public static <Y> Seq<Y> nil() {
     @SuppressWarnings("unchecked") Seq<Y> castedNil = (Seq<Y>) Nil.nil;
     return castedNil;

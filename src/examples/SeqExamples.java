@@ -6,6 +6,7 @@ package jpfds.examples;
 
 import jpfds.*;
 
+/** A collection of examples for the Seq data structure. */
 public final class SeqExamples {
   private SeqExamples() { }
 

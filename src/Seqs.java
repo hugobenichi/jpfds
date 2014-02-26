@@ -19,7 +19,7 @@ public final class Seqs {
     return List.cons(elem, seq);
   }
 
-  public static <Y> SeqBuilder<Y> builder() { return SeqBuilder.get(); }
+  public static <Y> SeqBuilder<Y> builder() { return List.builder(); }
 
   public static <Y> Seq<Y> of(Iterable<Y> elems) {
     SeqBuilder<Y> bld = builder();
@@ -48,7 +48,7 @@ public final class Seqs {
   }
 
   public static <Y> Seq<Y> of(Y y1, Y y2, Y y3, Y y4) {
-    SeqBuilder<Y> bld = SeqBuilder.get();
+    SeqBuilder<Y> bld = builder();
     return bld.addThen(y1).addThen(y2).addThen(y3).addThen(y4).make();
   }
 

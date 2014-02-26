@@ -1,2 +1,2 @@
-/** Namespace containing examples of the usage of jpfds collections. */
+/** Namespace containing examples of jpfds collections in practice. */
 package jpfds.examples;

@@ -19,19 +19,19 @@ public interface Builder<X,C extends Col<X,C>> {
    *  @param elem a element to add to the collection being built. Can be null.*/
   void add(X elem);
 
-  /** Convenience for adding all elements from an Iterable to this builder.
+  /** Convenience operation for adding all elements from an Iterable.
    *  @param elems an Iterable collection of elements. Cannot be null. Can
    *  contain null references. */
   default void addAll(Iterable<X> elems) {
     for (X elem : elems) { this.add(elem); }
   }
 
-  /** Convenience for chaining add() operations.
+  /** Convenience operation for chaining add() operations.
    *  @param elem an element to add to the collection being built.
    *  @return this builder instance. */
   default Builder<X,C> addThen(X elem) { this.add(elem); return this; }
 
-  /** Convenience for chaining add() operations.
+  /** Convenience operation for chaining add() operations.
    *  @param elems an Iterable collection of elements. Cannot be null. Can
    *  contain null references.
    *  @return this builder instance. */
