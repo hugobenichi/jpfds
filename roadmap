@@ -1,6 +1,4 @@
 0.1 target
-  other seq utils: String seq from BufferedReader, String seq from split regex
-  test Reducible reduce, map, filter, flatMap
   polish built script (file tasks, run/exec, non console builds, add help)
   fully doc seq, seqbuilder,
   class-lvl doc for List
@@ -8,6 +6,7 @@
   add examples for reducer and seqs
   add release note in README
   add IntSeq + associated Col/Reducer
+  other seq utils: String seq from BufferedReader, String seq from split regex
 
 0.2 target
   add Set abstraction, Sorted abstraction

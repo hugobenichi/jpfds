@@ -190,10 +190,6 @@ describe 'Seq#lflatMap()' do
     Class.new { def apply x; Seqs.nil.cons(x) end }.new
   end
 
-  def toConst y
-    Class.new { def apply x; Seqs.nil.cons(y) end }.new
-  end
-
   it "should map the empty Seq to the empty Seq for any op" do
     Seqs.nil.lflatMap(toNil).isEmpty.should == true
     Seqs.nil.lflatMap(toBox).isEmpty.should == true
