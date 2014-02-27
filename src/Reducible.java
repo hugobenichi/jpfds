@@ -49,7 +49,8 @@ public interface Reducible<X> {
   /** Creates a new Reducible using a unary mapping function.
    *  @param f a unary mapping function. Cannot be null.
    *  @param <Y> the output type of the mapping function.
-   *  @return a Reducible that produces elements with the mapping function applied on */
+   *  @return a Reducible that produces elements sourced by the original
+   *  Reducible object with the mapping function applied on them. */
   default <Y> Reducible<Y> map(final Function<? super X,Y> f) {
     final Reducible<X> source = this;
     return new Reducible<Y>() {

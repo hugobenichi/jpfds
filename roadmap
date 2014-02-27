@@ -1,7 +1,6 @@
 0.1 target
-  polish built script (file tasks, run/exec, non console builds, add help)
-  fully doc seq, seqbuilder,
-  class-lvl doc for List
+  polish built script:
+    timeout on tests, file tasks, run/exec, non console builds, add help
   add java run ant tasks for executing examples
   add examples for reducer and seqs
   add release note in README
