@@ -13,6 +13,7 @@ public interface Node<X> {
 
   // make a new Node with the same node val but new children
   Node<X> make(Node<X> left, Node<X> right);
+  Node<X> init(X val);
 
   default boolean isLeaf() { return false; }
 
@@ -46,10 +47,14 @@ public interface Node<X> {
 
   public interface Leaf<X> extends Node<X> {
     default boolean isLeaf() { return true; }
+    default X val() { throw new UnsupportedOperationException("x_x"); }
     default Node<X> left() { throw new UnsupportedOperationException(">_<"); }
     default Node<X> right() { throw new UnsupportedOperationException(":-("); }
     default Node<X> remove(X x, Comparator<X> ord) { return this; }
-    //Node<X> insert(X x, Comparator<X> ord)
+    default Node<X> insert(X x, Comparator<X> ord) { return init(x); }
+    default Node<X> make(Node<X> left, Node<X> right) {
+      throw new UnsupportedOperationException(">_<");
+    }
   }
 
 }

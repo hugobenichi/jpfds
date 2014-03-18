@@ -49,7 +49,31 @@ public class TreeSet<X> implements Set<X>, Size.Constant {
     return new TreeSet<Y>(ord, leaf(), 0);
   }
 
-  // need a concrete class
-  public static <Y> Node<Y> leaf() { return null; }
+  public static <Y> Node<Y> leaf() { return new TreeLeaf<Y>(); }
+
+  private static class TreeNode<X> implements Node<X> {
+    private final X val;
+    private final Node<X> left;
+    private final Node<X> right;
+    public TreeNode(X val, Node<X> l, Node<X> r) {
+      this.val = val; this.left = l; this.right = r;
+    }
+    public X val() { return val; }
+    public Node<X> left() { return left; }
+    public Node<X> right() { return right; }
+    public Node<X> make(Node<X> l, Node<X> r) {
+      return new TreeNode<X>(val,l,r);
+    }
+    public Node<X> init(X val) {
+      return new TreeNode<X>(val, new TreeLeaf<X>(), new TreeLeaf<X>());
+    }
+  }
+
+  // share this as a singleton
+  private static class TreeLeaf<X> implements Node.Leaf<X> {
+    public Node<X> init(X val) {
+      return new TreeNode<X>(val, new TreeLeaf<X>(), new TreeLeaf<X>());
+    }
+  }
 
 }
