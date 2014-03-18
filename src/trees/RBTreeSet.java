@@ -33,7 +33,7 @@ public class RBTreeSet<X> implements Set<X>, Size.Constant {
 
   public RBTreeSet<X> empty() { return empty(ord); }
 
-  public boolean has(X x) { return root.has(x, ord); }
+  public boolean has(X x) { return Nodes.has(root, x, ord); }
 
   public RBTreeSet<X> add(X elem) {
     RBNode<X> newRoot = root.insert(elem, ord);

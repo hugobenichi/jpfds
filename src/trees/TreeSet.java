@@ -33,7 +33,7 @@ public class TreeSet<X> implements Set<X>, Size.Constant {
 
   public TreeSet<X> empty() { return empty(ord); }
 
-  public boolean has(X x) { return root.has(x, ord); }
+  public boolean has(X x) { return Nodes.has(root, x, ord); }
 
   public TreeSet<X> add(X elem) {
     Node<X> newRoot = root.insert(elem, ord);
