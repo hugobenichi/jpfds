@@ -11,13 +11,13 @@ import jpfds.Seqs;
 import jpfds.Set;
 import jpfds.Size;
 
-public class RBTreeSet<X> implements Set<X>, Size.Constant {
+public class TreeSet<X> implements Set<X>, Size.Constant {
 
-  private final RBNode<X> root;
+  private final Node<X> root;
   private final Comparator<X> ord;
   private final int size;
 
-  private RBTreeSet(Comparator<X> ord, RBNode<X> node, int size) {
+  private TreeSet(Comparator<X> ord, Node<X> node, int size) {
     this.ord = ord; this.root = node; this.size = size;
   }
 
@@ -31,27 +31,25 @@ public class RBTreeSet<X> implements Set<X>, Size.Constant {
   // back tracking iterator ! deleguate to node class
   public Seq<X> seq() { return Seqs.nil(); }
 
-  public RBTreeSet<X> empty() { return empty(ord); }
+  public TreeSet<X> empty() { return empty(ord); }
 
   public boolean has(X x) { return root.has(x, ord); }
 
-  public RBTreeSet<X> add(X elem) {
-    RBNode<X> newRoot = root.insert(elem, ord);
-    return newRoot == root ?
-        this : new RBTreeSet<X>(ord, newRoot.toBlack(), size+1);
+  public TreeSet<X> add(X elem) {
+    Node<X> newRoot = root.insert(elem, ord);
+    return newRoot == root ? this : new TreeSet<X>(ord, newRoot, size+1);
   }
 
-  public RBTreeSet<X> remove(X elem) {
-    RBNode<X> newRoot = root.remove(elem, ord);
-    return newRoot == root ?
-        this : new RBTreeSet<X>(ord, newRoot.toBlack(), size-1);
+  public TreeSet<X> remove(X elem) {
+    Node<X> newRoot = root.remove(elem, ord);
+    return newRoot == root ? this : new TreeSet<X>(ord, newRoot, size-1);
   }
 
-  public static <Y> RBTreeSet<Y> empty(Comparator<Y> ord) {
-    return new RBTreeSet<Y>(ord, leaf(), 0);
+  public static <Y> TreeSet<Y> empty(Comparator<Y> ord) {
+    return new TreeSet<Y>(ord, leaf(), 0);
   }
 
   // need a concrete class
-  public static <Y> RBNode<Y> leaf() { return null; }
+  public static <Y> Node<Y> leaf() { return null; }
 
 }

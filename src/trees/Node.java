@@ -14,6 +14,7 @@ public interface Node<X> {
 
   default boolean isLeaf() { return false; }
 
+// move to utility static function
   default boolean has(X x, Comparator<X> ord) {
     int comp = ord.compare(x, val());
     if (comp == 0) return true;
@@ -49,6 +50,7 @@ public interface Node<X> {
     }
   }
 
+// move to utility static function and use a constructor
   default Node<X> rotateRight() {
     Node<X> y = left();
     if (y.isLeaf()) return this;
@@ -56,6 +58,7 @@ public interface Node<X> {
     return make(y.val(), y.left(), x);
   }
 
+// move to utility static funcion and use a constructor
   default Node<X> rotateLeft() {
     Node<X> x = right();
     if (x.isLeaf()) return this;
