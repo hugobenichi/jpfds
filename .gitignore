@@ -1,3 +1,4 @@
-out/
+/vagrant/.vagrant/
+/out/
 *class
 *jar

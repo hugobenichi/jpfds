@@ -5,7 +5,7 @@ set -x
 # config variables
 java8_dl="http://download.java.net/jdk8/archive/b120/binaries/"\
 "jdk-8-ea-bin-b120-linux-x64-12_dec_2013.tar.gz?q=download"
-ant_dl="http://ftp.yz.yamagata-u.ac.jp/pub/network/apache//ant/binaries/"\
+ant_dl="http://ftp.yz.yamagata-u.ac.jp/pub/network/apache/ant/binaries/"\
 "apache-ant-1.9.3-bin.tar.gz"
 jruby_dl="http://jruby.org.s3.amazonaws.com/downloads/1.7.9/"\
 "jruby-bin-1.7.9.tar.gz"
@@ -38,9 +38,9 @@ $ant_path/ant -version >/dev/null 2>&1 || {
 $jruby_path/jruby -version >/dev/null 2>&1 || {
   curl $jruby_dl | tar -xz
   export PATH=$PATH:$jdk8_path:$jruby_path
-  echo "export PATH=$PATH:$jruby_path" >> /home/vagrant/.bashrc
+  echo "export PATH=\$PATH:$jruby_path" >> /home/vagrant/.bashrc
   cd /home/vagrant/jruby-1.7.9/tool/nailgun/ && ./configure && make
   jruby -S jgem install $gems
 }
 
-echo "export PATH=$PATH:/home/vagrant/jpfds" >> /home/vagrant/.bashrc
+echo "export PATH=\$PATH:/home/vagrant/jpfds" >> /home/vagrant/.bashrc
