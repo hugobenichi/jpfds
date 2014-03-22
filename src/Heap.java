@@ -4,8 +4,19 @@
 
 package jpfds;
 
-public interface Heap<X> extends Col<X,Heap<X>> {
+//public interface Heap<X,H extends Heap<X,H>> extends Col<X,H>, Seq<X> {
+public interface Heap<X,H extends Heap<X,H>> extends Col<X,H> {
   X min();
-  Heap<X> pop();
-  default Heap<X> union(Heap<X> that) { return that.into(this); }
+  H pop(); // should I tie this to the specific type of the Heap implem ?
+           // should I say that Heap extends Col ?
+           // should I say that Heap extends Seq ?
+
+  /*
+  default Seq<X> seq() { return this; }
+
+  default X head() { return min(); }
+
+  default Seq<X> tail() { return pop(); }
+  */
+
 }
